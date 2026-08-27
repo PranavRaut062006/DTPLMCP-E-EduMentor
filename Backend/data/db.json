@@ -70,7 +70,7 @@
         "Five Stages of Design Thinking"
       ],
       "position": 2,
-      "status": "DRAFT",
+      "status": "PUBLISHED",
       "created_at": "2026-08-27T14:20:50.957Z"
     },
     {
@@ -782,10 +782,10 @@
           "script": "That brings us to the end of our introduction to Design Thinking. I hope this session has provided you with a solid foundation. Now, I'd love to open it up for any questions you might have. [Facilitate Q&A]. For those interested in diving deeper, I highly recommend 'Design Thinking' and 'Change by Design' by Tim Brown, CEO of IDEO, and 'Sprint' by Jake Knapp, which offers a practical guide to rapid prototyping. Excellent online resources include IDEO.org, the Stanford d.school, and the Nielsen Norman Group. Thank you all for your engagement and participation today!"
         }
       ],
-      "status": "DRAFT",
+      "status": "PUBLISHED",
       "created_by": "25adb12c-06c0-4eb3-8986-0fead403c392",
       "created_at": "2026-08-27T17:04:00.332Z",
-      "updated_at": "2026-08-27T17:18:22.875Z"
+      "updated_at": "2026-08-27T17:31:00.566Z"
     }
   ]
 }

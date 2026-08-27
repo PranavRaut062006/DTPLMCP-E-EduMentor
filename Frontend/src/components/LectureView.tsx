@@ -19,40 +19,21 @@ function Bullets({ items }: { items: string[] }) {
   );
 }
 
-export function LectureView({ lecture }: { lecture: LectureContent }) {
+import ReactMarkdown from "react-markdown";
+
+export function LectureView({ lecture }: { lecture: any }) {
+  if (typeof lecture === 'string') {
+    return (
+      <div className="panel p-6 prose prose-sm max-w-none dark:prose-invert">
+        <ReactMarkdown>{lecture}</ReactMarkdown>
+      </div>
+    );
+  }
+
+  // Fallback for old JSON format
   return (
-    <div className="panel p-6">
-      <h2 className="font-display text-xl font-semibold">{lecture.title}</h2>
-      <Section title="Learning objectives">
-        <Bullets items={lecture.learningObjectives} />
-      </Section>
-      <Section title="Introduction">
-        <p className="whitespace-pre-wrap">{lecture.introduction}</p>
-      </Section>
-      <Section title="Concept explanation">
-        <p className="whitespace-pre-wrap">{lecture.conceptExplanation}</p>
-      </Section>
-      <Section title="Important points">
-        <Bullets items={lecture.importantPoints} />
-      </Section>
-      <Section title="Examples">
-        <Bullets items={lecture.examples} />
-      </Section>
-      <Section title="Applications">
-        <Bullets items={lecture.applications} />
-      </Section>
-      <Section title="Summary">
-        <p className="whitespace-pre-wrap">{lecture.summary}</p>
-      </Section>
-      <Section title="Important questions">
-        <Bullets items={lecture.importantQuestions} />
-      </Section>
-      {lecture.syllabusGaps && (
-        <p className="mt-6 rounded-lg border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-foreground">
-          <span className="font-semibold">Syllabus note: </span>
-          {lecture.syllabusGaps}
-        </p>
-      )}
+    <div className="panel p-6 prose prose-sm max-w-none dark:prose-invert">
+      <pre className="whitespace-pre-wrap text-sm">{JSON.stringify(lecture, null, 2)}</pre>
     </div>
   );
 }
