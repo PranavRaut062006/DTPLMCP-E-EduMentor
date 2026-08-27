@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import ReactMarkdown from "react-markdown";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ArrowLeft, Check, Download, FileDown, Loader2, Save, Sparkles, Video } from "lucide-react";
@@ -179,9 +180,8 @@ function TopicEditor() {
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="panel p-6">
-                <h3 className="font-semibold mb-2">Teaching Plan & Script</h3>
-                <pre className="whitespace-pre-wrap text-sm">{typeof lecture === 'string' ? lecture : JSON.stringify(lecture, null, 2)}</pre>
+              <div className="panel p-6 prose prose-sm max-w-none dark:prose-invert">
+                <ReactMarkdown>{typeof lecture === 'string' ? lecture : JSON.stringify(lecture, null, 2)}</ReactMarkdown>
               </div>
             </div>
           )}
@@ -198,7 +198,7 @@ function TopicEditor() {
           ) : (
             <>
               <div className="flex justify-end">
-                <Button variant="outline" onClick={() => downloadPptx(`Topic_${topicId}`, "AI Generated Slides", ppt)}>
+                <Button variant="outline" onClick={() => downloadPptx(`Presentation`, "", ppt)}>
                   <Download className="size-4" /> Download .pptx
                 </Button>
               </div>

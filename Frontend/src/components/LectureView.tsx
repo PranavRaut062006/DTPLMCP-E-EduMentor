@@ -67,15 +67,28 @@ export function PptView({ ppt }: { ppt: any }) {
         const notes = slide.script || slide.notes || "";
         return (
           <div key={i} className="panel flex flex-col p-5">
-            <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-              Slide {i + 1}
-            </p>
-            <p className="mt-1 font-semibold">{slide.title}</p>
+            <div className="flex justify-between items-start mb-1">
+              <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+                Slide {i + 1}
+              </p>
+              {slide.layout && (
+                <span className="text-[10px] font-semibold bg-secondary text-secondary-foreground px-2 py-0.5 rounded-full">
+                  {slide.layout.replace("_", " ")}
+                </span>
+              )}
+            </div>
+            <p className="font-semibold">{slide.title}</p>
             <ul className="mt-3 list-disc space-y-1 pl-5 text-sm marker:text-primary">
               {points.map((p: string, j: number) => (
                 <li key={j}>{p}</li>
               ))}
             </ul>
+            {slide.layout === "image_right" && slide.visualPrompt && (
+              <div className="mt-4 p-3 bg-secondary/50 rounded-lg text-xs">
+                <span className="font-semibold text-primary">🖼️ AI Image Prompt: </span>
+                <span className="text-muted-foreground italic">{slide.visualPrompt}</span>
+              </div>
+            )}
             {notes && (
               <p className="mt-4 border-t border-border pt-3 text-xs text-muted-foreground">
                 <span className="font-semibold">Speaker notes: </span>

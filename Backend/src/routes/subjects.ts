@@ -13,7 +13,9 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 router.get('/', (req: any, res) => {
   const db = readDB();
-  const subjects = db.subjects.filter(s => s.faculty_id === req.user.id);
+  const subjects = req.user.role === 'student'
+    ? db.subjects
+    : db.subjects.filter(s => s.faculty_id === req.user.id);
   res.json(subjects);
 });
 

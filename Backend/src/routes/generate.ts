@@ -32,16 +32,28 @@ router.post('/topic/:topicId', async (req: any, res) => {
       const prompt = `
         Create a teaching plan and lecture script for the topic: "${topic.title}".
         Subtopics: ${topic.subtopics.join(', ')}.
-        Duration: ${durationHours} hours.
+        Note: The duration of the entire unit is ${durationHours} hours, so allocate an appropriate fraction of time for this specific topic.
         References: ${references}.
         
         Format the output as ONLY JSON (without markdown block ticks) with the following structure:
         {
-          "plan": "Detailed teaching plan...",
+          "plan": "Detailed teaching plan formatted in Markdown...",
           "slides": [
-            { "title": "Slide Title", "bullets": ["Point 1", "Point 2"], "script": "What the faculty will say..." }
+            { 
+              "title": "Slide Title", 
+              "bullets": ["Point 1", "Point 2"], 
+              "script": "What the faculty will say...",
+              "layout": "standard" | "image_right" | "process_flow",
+              "visualPrompt": "A short, descriptive prompt for an AI image generator (e.g., 'A modern corporate office with AI robots', 'A flowchart showing data flow'). Required if layout is image_right, otherwise empty."
+            }
           ]
         }
+        
+        Important Guidelines:
+        1. Mix up the slide layouts to keep the presentation visually engaging.
+        2. Use 'process_flow' layout for sequences, cycles, comparisons, or step-by-step concepts.
+        3. Use 'image_right' layout for conceptual slides to include an AI generated image.
+        4. Use 'standard' layout for basic text points.
       `;
       
       const result = await model.generateContent(prompt);
@@ -110,7 +122,7 @@ router.post('/video/:topicId', async (req: any, res) => {
     }
 
     // In a real app we'd process in the background. We return success quickly.
-    res.json({ message: 'Video generation started in background' });
+    res.json({ message: '(Coming Soon) Video generation mock started. No actual video will be produced yet.' });
 
     // BACKGROUND PROCESS:
     (async () => {

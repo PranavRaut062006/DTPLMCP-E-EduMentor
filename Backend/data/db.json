@@ -70,7 +70,7 @@
         "Five Stages of Design Thinking"
       ],
       "position": 2,
-      "status": "NOT_GENERATED",
+      "status": "DRAFT",
       "created_at": "2026-08-27T14:20:50.957Z"
     },
     {
@@ -530,6 +530,262 @@
       "created_by": "25adb12c-06c0-4eb3-8986-0fead403c392",
       "created_at": "2026-08-27T14:33:17.161Z",
       "updated_at": "2026-08-27T14:41:54.382Z"
+    },
+    {
+      "id": "f024f585-56d8-42fc-b99a-086a7bb0eda9",
+      "topic_id": "bb698a6e-faf2-4725-973a-05e20bed65fd",
+      "lecture_content": "## Teaching Plan: Introduction to Design Thinking (4 Hours)\n\n**Topic:** Introduction to Design Thinking\n**Subtopics:** Human-Centered Product Design, Five Stages of Design Thinking\n**Duration:** 4 Hours\n\n**Overall Learning Objectives:**\nBy the end of this session, participants will be able to:\n1.  Explain the core principles of Human-Centered Product Design.\n2.  Describe the five stages of the Design Thinking process.\n3.  Identify key tools and techniques used in each stage.\n4.  Understand the iterative and non-linear nature of Design Thinking.\n5.  Recognize the value and application of Design Thinking in various contexts.\n\n--- \n\n### **Module 1: Foundations of Design Thinking & Human-Centered Design (60 minutes)**\n\n*   **Time (Cumulative):** 0-10 min\n    *   **Activity:** Welcome, Introductions, Course Overview.\n    *   **Content:** What is Design Thinking? (Initial hook: Why is it relevant today?).\n    *   **Learning Objective:** Understand the session's scope and the fundamental 'why' of Design Thinking.\n*   **Time (Cumulative):** 10-20 min\n    *   **Content:** Why Design Thinking? (Addressing complexity, innovation, user focus).\n    *   **Learning Objective:** Appreciate the benefits and strategic importance of Design Thinking.\n*   **Time (Cumulative):** 20-40 min\n    *   **Content:** Human-Centered Product Design (HCD) - Core philosophy, contrasting with technology- or business-centered approaches.\n    *   **Learning Objective:** Grasp the foundational concept of HCD and its differentiation.\n*   **Time (Cumulative):** 40-60 min\n    *   **Content:** The Power of Empathy - Importance of understanding users, moving beyond assumptions, user needs vs. wants.\n    *   **Activity:** Quick group discussion: \"Think about a common product you use daily. What's a 'hidden' frustration or unarticulated need you have with it?\"\n    *   **Learning Objective:** Understand the critical role of empathy in HCD and begin to practice user-centric observation.\n\n### **Module 2: The First Two Stages of Design Thinking (60 minutes)**\n\n*   **Time (Cumulative):** 60-70 min\n    *   **Content:** Overview of the Five Stages of Design Thinking (High-level introduction).\n    *   **Learning Objective:** Get a bird's-eye view of the Design Thinking process.\n*   **Time (Cumulative):** 70-95 min\n    *   **Content:** **Stage 1: Empathize** - Deep dive into techniques (Interviews, Observation, Immersion) and tools (Empathy Maps, Personas - conceptual).\n    *   **Activity:** Individual reflection: \"Choose a simple public service (e.g., waiting at a bus stop). Briefly list 3 things you could observe about people there to understand their needs/frustrations.\"\n    *   **Learning Objective:** Learn practical methods for gathering user insights and building empathy.\n*   **Time (Cumulative):** 95-120 min\n    *   **Content:** **Stage 2: Define** - Synthesizing insights, identifying core problems, Point of View (POV) statements, \"How Might We\" (HMW) questions.\n    *   **Activity:** Pair/Group exercise: Given a simple user problem (e.g., \"Students struggle to find quiet study spaces on campus\"), formulate a POV statement and 2-3 HMW questions.\n    *   **Learning Objective:** Develop skills in framing user problems effectively and generating actionable questions.\n\n### **Module 3: The Middle Stages of Design Thinking (60 minutes)**\n\n*   **Time (Cumulative):** 120-150 min\n    *   **Content:** **Stage 3: Ideate** - Divergent thinking, brainstorming rules (defer judgment, go for quantity, build on ideas), various ideation techniques (e.g., Mind Mapping, Brainwriting - conceptual).\n    *   **Activity:** Quick group brainstorming: Using one of the HMW questions from the previous activity, spend 5 minutes generating as many ideas as possible (emphasize quantity over quality).\n    *   **Learning Objective:** Understand the principles of effective ideation and practice divergent thinking.\n*   **Time (Cumulative):** 150-180 min\n    *   **Content:** **Stage 4: Prototype** - What is a prototype? Why prototype? Low-fidelity vs. High-fidelity, types of prototypes (sketch, paper, physical model, digital mockup, role-play). The concept of 'failing fast' and learning.\n    *   **Activity:** Individual/Pair activity: Select one idea from the brainstorming session. Spend 5-7 minutes sketching a very low-fidelity paper prototype (e.g., a simple user flow for a mobile app feature, a physical object sketch).\n    *   **Learning Objective:** Appreciate the purpose and value of prototyping, and gain experience in creating simple prototypes.\n\n### **Module 4: The Final Stage & Conclusion (60 minutes)**\n\n*   **Time (Cumulative):** 180-200 min\n    *   **Content:** **Stage 5: Test** - Purpose of testing, gathering feedback, observing user behavior, iterative nature of the process, what to look for during testing.\n    *   **Learning Objective:** Understand the importance of user feedback and iteration in refining solutions.\n*   **Time (Cumulative):** 200-215 min\n    *   **Content:** Design Thinking in Practice - Real-world examples (e.g., GE Healthcare, Airbnb, local examples if applicable), benefits, common challenges.\n    *   **Learning Objective:** See Design Thinking applied in diverse contexts and understand its practical implications.\n*   **Time (Cumulative):** 215-225 min\n    *   **Content:** Recap of the Five Stages, Emphasizing Iteration & Non-linearity - The double diamond model (briefly).\n    *   **Learning Objective:** Consolidate understanding of the entire process and its flexible nature.\n*   **Time (Cumulative):** 225-240 min\n    *   **Activity:** Q&A Session, Further Resources (books, websites, courses), Call to Action (start practicing Design Thinking).\n    *   **Learning Objective:** Address questions and provide pathways for continued learning and application.\n\n--- \n",
+      "ppt_content": [
+        {
+          "title": "Slide 1: Welcome to Introduction to Design Thinking!",
+          "bullets": [
+            "Your Facilitator: [Your Name]",
+            "What to Expect Today: A foundational journey into innovation",
+            "Duration: 4 Hours (with breaks)"
+          ],
+          "script": "Good morning/afternoon, everyone! Welcome to our session on 'Introduction to Design Thinking.' I'm [Your Name], and I'll be your guide through this exciting topic. Over the next four hours, we'll explore the core concepts and methodologies that empower us to create truly meaningful and impactful solutions. We have a lot to cover, so let's jump right in!"
+        },
+        {
+          "title": "Slide 2: What is Design Thinking?",
+          "bullets": [
+            "A human-centered approach to innovation.",
+            "A methodology for solving complex problems.",
+            "Focuses on understanding users, challenging assumptions, redefining problems, and creating innovative solutions.",
+            "It's a mindset, a process, and a toolkit."
+          ],
+          "script": "So, what exactly is Design Thinking? At its heart, it's a human-centered approach to innovation. It's a powerful methodology for tackling complex problems by putting the people you're designing for at the very center of the process. It's about deeply understanding their needs, challenging our own assumptions, reframing problems in new ways, and then iterating quickly to create innovative solutions. Think of it not just as a rigid process, but also a mindset – a way of thinking – and a practical toolkit of methods."
+        },
+        {
+          "title": "Slide 3: Why Design Thinking Now?",
+          "bullets": [
+            "Increasing complexity of problems (social, business, technological).",
+            "Need for true innovation, not just incremental improvements.",
+            "Competitive advantage: Differentiating through superior user experience.",
+            "Fosters collaboration and creativity.",
+            "Reduces risk by validating ideas early."
+          ],
+          "script": "Why is Design Thinking so crucial in today's world? We face increasingly complex problems – from climate change to public health, to the daily challenges within our businesses and organizations. Traditional problem-solving methods often fall short. Design Thinking helps us cut through this complexity. It's about achieving true innovation, not just making small, incremental changes. In a crowded marketplace, a superior user experience, driven by human-centered design, becomes a key competitive advantage. Beyond that, it's a highly collaborative and creative process, bringing diverse perspectives together. And importantly, by prototyping and testing ideas early, it significantly reduces the risk of investing heavily in solutions that ultimately fail to meet user needs."
+        },
+        {
+          "title": "Slide 4: Human-Centered Product Design (HCD)",
+          "bullets": [
+            "**The Core Philosophy:** Start with people, end with people.",
+            "**Focus:** Understanding user needs, motivations, and behaviors.",
+            "**Contrast:** Not technology-driven, not business-driven (initially).",
+            "**Goal:** Create desirable, feasible, and viable solutions."
+          ],
+          "script": "Let's dive deeper into one of the foundational concepts: Human-Centered Product Design, or HCD. This is the bedrock of Design Thinking. The core philosophy is simple: you start with people, and you end with people. It's about deeply understanding their needs, their motivations, their pain points, and their behaviors. This is a contrast to approaches that might start with, 'What can our technology do?' or 'What can we sell to make money?' While technology and business viability are crucial later, HCD insists we begin with the human element. The ultimate goal is to create solutions that are not only desirable by users, but also technically feasible to build and viable for the business."
+        },
+        {
+          "title": "Slide 5: The Power of Empathy",
+          "bullets": [
+            "**Definition:** The ability to understand and share the feelings of another.",
+            "**In Design:** Stepping into the user's shoes, seeing the world through their eyes.",
+            "**Why it's crucial:** Uncovers unarticulated needs, challenges assumptions, prevents designing for ourselves.",
+            "**Go beyond:** What people say, to what they do, and why they do it."
+          ],
+          "script": "Central to Human-Centered Design is the concept of empathy. Empathy, simply put, is the ability to understand and share the feelings of another. In the context of design, it means truly stepping into your user's shoes. It's about seeing the world from their perspective, not just your own. Why is this so crucial? Because empathy helps us uncover those often unarticulated needs – the frustrations or desires users might not even be able to express themselves. It forces us to challenge our own assumptions and prevents us from simply designing for ourselves or for 'average users' who don't truly exist. It means going beyond just what people say, to observing what they do, and digging into why they do it."
+        },
+        {
+          "title": "Slide 6: Activity: Spotting Everyday Frustrations",
+          "bullets": [
+            "Observe your surroundings for 1 minute.",
+            "Identify one small frustration a person might encounter.",
+            "Think about 'why' this is a frustration.",
+            "Share your observations (briefly)."
+          ],
+          "script": "Let's try a quick exercise to build our empathy muscles. I want everyone to take just 60 seconds to quietly observe your immediate surroundings – whether it's the room you're in, or even just thinking about your journey here today. Identify one small frustration, a minor pain point, that a person might encounter with an object, a service, or an interaction in that environment. Then, briefly think about 'why' that's a frustration. After a minute, we'll quickly share a few examples. [Pause for 1 minute]. Okay, who would like to share an observation? Great examples! You can see how quickly we can start identifying opportunities for improvement just by actively observing."
+        },
+        {
+          "title": "Slide 7: The Five Stages of Design Thinking",
+          "bullets": [
+            "A framework, not a rigid linear process.",
+            "Empathize: Understand your users.",
+            "Define: State your users' needs and problems.",
+            "Ideate: Challenge assumptions and create ideas.",
+            "Prototype: Start creating solutions.",
+            "Test: Try out your solutions and learn."
+          ],
+          "script": "Now, let's look at the widely recognized framework for Design Thinking, often broken down into five stages. It's crucial to understand that while we present them sequentially, Design Thinking is not a rigid, linear process. It's highly iterative, meaning you can loop back and forth between stages as you learn more. These stages are: Empathize, Define, Ideate, Prototype, and Test. We'll go through each of these in detail, but this gives you the high-level roadmap of how we move from understanding a problem to creating and refining a solution."
+        },
+        {
+          "title": "Slide 8: Stage 1: Empathize - Understanding Your Users",
+          "bullets": [
+            "**Goal:** Gain a deep understanding of your users, their needs, motivations, and pain points.",
+            "**Methods:** User interviews, observation, immersion, contextual inquiry.",
+            "**Tools:** Empathy Maps, Personas (conceptual), Journey Maps.",
+            "**Outcome:** Rich qualitative data, unbiased insights."
+          ],
+          "script": "Our first stage is 'Empathize.' The goal here is absolutely critical: it's all about gaining a deep, empathetic understanding of your users. We want to know their needs, their desires, what motivates them, and what frustrates them. We use various methods to do this. We conduct user interviews to hear their stories, we observe them in their natural environment to see what they actually do, and sometimes we even immerse ourselves in their experiences. Tools like Empathy Maps help us synthesize observations into what users think, feel, say, and do. Personas are archetypes of our target users, and Journey Maps visualize their experiences over time. The outcome is rich, qualitative data that provides unbiased, human-centered insights."
+        },
+        {
+          "title": "Slide 9: Activity: User Needs Reflection",
+          "bullets": [
+            "Think about a common daily object (e.g., a coffee mug, a backpack).",
+            "What's a hidden, unarticulated need or frustration a user might have with it?",
+            "How might you 'empathize' to discover this?"
+          ],
+          "script": "Let's do another quick reflection. Think about a very common daily object – maybe a coffee mug, or a backpack. Now, go beyond the obvious functions. What's a hidden, perhaps unarticulated, need or frustration a user might have with that object? And how might you, as a designer, go about empathizing – through observation or a simple conversation – to discover that need? Just take a minute to think. This helps us practice looking beyond the surface."
+        },
+        {
+          "title": "Slide 10: Stage 2: Define - Stating the Problem",
+          "bullets": [
+            "**Goal:** Synthesize insights from the 'Empathize' stage into a clear, actionable problem statement.",
+            "**Methods:** Affinity diagramming, identifying themes, synthesizing observations.",
+            "**Tools:** Point of View (POV) statements, 'How Might We' (HMW) questions.",
+            "**Outcome:** A focused, user-centered problem to solve."
+          ],
+          "script": "Once we've gathered all those rich insights from the Empathize stage, we move to 'Define.' This is where we make sense of all that information. The goal here is to synthesize our findings into a clear, actionable problem statement. We use methods like affinity diagramming, where we group similar observations and insights, to identify overarching themes. From these themes, we craft powerful statements. Two key tools are Point of View, or POV, statements, which clearly articulate a user's need, and 'How Might We' questions, which are open-ended questions that invite creative solutions. The outcome of the Define stage is a focused, user-centered problem that we are now ready to solve."
+        },
+        {
+          "title": "Slide 11: POV Statements & HMW Questions",
+          "bullets": [
+            "**Point of View (POV) Statement:** 'User needs Need because Insight.'",
+            "Example: 'A busy professional needs to quickly find healthy lunch options because they have limited time and want to maintain a balanced diet.'",
+            "**How Might We (HMW) Question:** Reframe the POV into an actionable question.",
+            "Example: 'How might we help busy professionals discover healthy lunch options efficiently?'"
+          ],
+          "script": "Let's look at examples of these critical tools. A Point of View statement follows a specific structure: 'User needs Need because Insight.' For instance, 'A busy professional needs to quickly find healthy lunch options because they have limited time and want to maintain a balanced diet.' This statement is specific, user-centric, and based on an insight. From this POV, we then generate 'How Might We' questions. These are open-ended questions that reframe the problem into an opportunity for innovation. So, from our POV, an HMW could be: 'How might we help busy professionals discover healthy lunch options efficiently?' This question invites many different solutions, rather than prescribing one."
+        },
+        {
+          "title": "Slide 12: Activity: Formulating HMW Questions",
+          "bullets": [
+            "**Problem:** 'Students struggle to find quiet study spaces on campus.'",
+            "**Your Task:**\n    1.  Formulate a POV statement based on this problem.\n    2.  Generate 2-3 'How Might We' questions from your POV.\n    3.  Share your questions (briefly)."
+          ],
+          "script": "Now it's your turn! Let's work with a common problem: 'Students struggle to find quiet study spaces on campus.' In pairs or small groups, I want you to first formulate a Point of View statement based on this problem, thinking about the user and their underlying need. Then, from your POV, generate 2-3 'How Might We' questions that could lead to innovative solutions. Take about 5-7 minutes, then we'll share a few. [Facilitate activity and discussion]. Excellent! You can already see how powerful HMW questions are for opening up solution spaces."
+        },
+        {
+          "title": "Slide 13: Stage 3: Ideate - Generating Solutions",
+          "bullets": [
+            "**Goal:** Generate a wide range of creative ideas to address the defined problem.",
+            "**Mindset:** Divergent thinking, quantity over quality, defer judgment.",
+            "**Methods:** Brainstorming, mind mapping, sketching, 'Worst Possible Idea', SCAMPER (conceptual).",
+            "**Outcome:** A large pool of potential solutions."
+          ],
+          "script": "With a well-defined problem, we move to 'Ideate.' This is the fun part – where creativity truly flourishes! The goal here is to generate a wide range of creative ideas, without constraint, to address our defined problem. The mindset for ideation is all about divergent thinking: explore as many possibilities as you can. Emphasize quantity over quality initially, and crucially, defer judgment – no idea is a bad idea in this stage. We use methods like traditional brainstorming, mind mapping, sketching, or even techniques like 'Worst Possible Idea' to push boundaries. The outcome is a large pool of potential solutions, some crazy, some brilliant, but all generated freely."
+        },
+        {
+          "title": "Slide 14: Brainstorming Best Practices",
+          "bullets": [
+            "**Go for Quantity:** Aim for many ideas, not just a few perfect ones.",
+            "**Defer Judgment:** No criticism, no 'that won't work' – just ideas.",
+            "**Encourage Wild Ideas:** The crazier, the better – they can spark new thoughts.",
+            "**Build on Others' Ideas:** 'Yes, and...' instead of 'No, but...'",
+            "**Stay Focused:** Stick to the HMW question.",
+            "**Be Visual:** Sketching can communicate ideas faster."
+          ],
+          "script": "To make ideation truly effective, especially during brainstorming sessions, we follow a few best practices. First, go for quantity – fill that whiteboard with ideas. Second, defer judgment; this is critical. No idea is too silly, and criticism shuts down creativity. Third, encourage wild ideas; often, the most outlandish ones can spark truly innovative but more practical solutions. Fourth, build on others' ideas – use 'yes, and...' to expand, rather than 'no, but...' which shuts down. Fifth, stay focused on your HMW question to keep your ideas relevant. And finally, be visual – sketching ideas can communicate them much faster than words alone."
+        },
+        {
+          "title": "Slide 15: Activity: Quick Ideation Session",
+          "bullets": [
+            "**HMW Question:** 'How might we make waiting in line less annoying?'",
+            "**Your Task:** Individually, or in pairs, brainstorm 5-7 ideas in 3 minutes.",
+            "Remember: Quantity over quality! Wild ideas welcome!",
+            "Share a few of your ideas."
+          ],
+          "script": "Let's put ideation into practice. Here's our 'How Might We' question: 'How might we make waiting in line less annoying?' Whether you're in a queue at the grocery store, an airport, or DMV, waiting can be a pain. I want everyone, individually or in pairs, to brainstorm 5 to 7 ideas in the next 3 minutes. Remember the rules: quantity over quality, no judgment, and wild ideas are absolutely welcome! Go! [Facilitate 3-minute brainstorm]. Alright, time's up! Who has a really interesting or perhaps a 'wild' idea to share? Fantastic! You can see how many diverse ideas we can generate in just a few minutes."
+        },
+        {
+          "title": "Slide 16: Stage 4: Prototype - Making Ideas Tangible",
+          "bullets": [
+            "**Goal:** Turn ideas into tangible forms that can be tested and iterated upon quickly.",
+            "**Why Prototype?** To learn, fail fast and cheaply, test assumptions, get feedback, communicate ideas.",
+            "**Types:** Sketches, paper prototypes, physical models, storyboards, digital mockups, role-playing.",
+            "**Fidelity:** Low-fidelity (rough, quick) vs. High-fidelity (closer to final product)."
+          ],
+          "script": "After ideation, we move to 'Prototype.' This is where we start bringing our ideas to life. The goal is to turn our abstract ideas into tangible forms – something you can see, touch, or interact with – that can be tested and refined quickly. Why do we prototype? We prototype to learn! To fail fast and cheaply, rather than investing heavily in a solution that might not work. It helps us test our assumptions, get early feedback from users, and clearly communicate our ideas to others. Prototypes can take many forms: simple sketches, paper mockups of an app, physical models, storyboards for a service, digital wireframes, or even role-playing an interaction. We talk about fidelity: low-fidelity prototypes are rough and quick, while high-fidelity ones are closer to the final product. For early stages, low-fidelity is often preferred."
+        },
+        {
+          "title": "Slide 17: Activity: Paper Prototyping a Solution",
+          "bullets": [
+            "**Your Task:** Choose ONE idea from our 'waiting in line' brainstorm.",
+            "Spend 5-7 minutes sketching a very low-fidelity paper prototype.",
+            "Think about key interactions or visuals.",
+            "Share your sketch with a neighbor."
+          ],
+          "script": "Let's get practical with prototyping. From the ideas we just brainstormed for 'making waiting in line less annoying,' I want you to pick just ONE idea. Now, using a piece of paper and a pen, spend the next 5 to 7 minutes sketching a very low-fidelity paper prototype of that idea. If it's an app, sketch a few key screens. If it's a physical object, sketch its form and how someone would interact with it. Don't worry about artistic skill, focus on conveying the core concept and key interactions. After 7 minutes, we'll quickly share our sketches with a neighbor. [Facilitate activity]. Great work! Even these simple sketches help us visualize and start to think through the user experience."
+        },
+        {
+          "title": "Slide 18: Stage 5: Test - Learning from Users",
+          "bullets": [
+            "**Goal:** Gather feedback on prototypes from real users and refine solutions.",
+            "**Methods:** User testing, observation, A/B testing, feedback sessions.",
+            "**Focus:** Observe user behavior, listen to feedback, identify what works/doesn't.",
+            "**Outcome:** Valuable insights for iteration and improvement."
+          ],
+          "script": "Finally, we reach 'Test.' This stage is about putting our prototypes in front of real users to gather feedback and learn. The goal is to refine our solutions based on what we discover. Methods include formal user testing sessions, where we give users tasks and observe them, informal feedback sessions, or even A/B testing different versions. The focus is not to 'sell' our idea, but to observe user behavior carefully, listen attentively to their feedback, and identify what works well and what doesn't. This isn't about proving an idea is right; it's about finding out where it needs to be improved. The outcome is invaluable insights that inform our next round of iteration and improvement."
+        },
+        {
+          "title": "Slide 19: The Iterative Nature of Design Thinking",
+          "bullets": [
+            "**Not a Linear Process:** You don't just go 1-2-3-4-5 and stop.",
+            "**Loops & Cycles:** Often move back and forth between stages.",
+            "**Learn -> Refine -> Repeat:** Every test provides new insights that feed back into Empathize, Define, or Ideate.",
+            "**The 'Double Diamond' Model:** Illustrates divergent and convergent thinking at each phase."
+          ],
+          "script": "It's vital to re-emphasize that Design Thinking is not a linear, step-by-step process where you finish one stage and never look back. It's highly iterative. You'll constantly loop back and forth between stages as you learn more. For example, a test might reveal a new user need, sending you back to Empathize and Define. Or an ideation session might make you realize you need to prototype a different aspect. It's a continuous cycle of 'Learn, Refine, Repeat.' Every test, every piece of feedback, provides new insights that feed back into understanding your users, refining the problem, or generating new ideas. This is often visualized with models like the 'Double Diamond,' which illustrates how we diverge (explore many options) and converge (narrow down) at different points in the process."
+        },
+        {
+          "title": "Slide 20: Design Thinking in Practice: Real-World Examples",
+          "bullets": [
+            "**GE Healthcare:** Redesigning MRI experience for children (Adventure Series).",
+            "**Airbnb:** Understanding hosts and guests to improve booking and stay experience.",
+            "**Stanford d.school:** Applying DT to education, social innovation, and public policy.",
+            "**Local Businesses/Startups:** Identifying unmet customer needs and developing unique value propositions."
+          ],
+          "script": "Design Thinking isn't just theory; it's applied in countless real-world scenarios. Think of GE Healthcare, who famously redesigned the MRI experience for children. Instead of a scary medical device, they transformed it into an 'Adventure Series' – a pirate ship or a rocket ship – making the experience playful and reducing the need for sedation. Airbnb used Design Thinking to deeply understand both hosts and guests, leading to improvements in everything from the booking flow to the photography guidelines. Universities like Stanford's d.school are pioneers in applying DT to education, social innovation, and even public policy challenges. And you'll find countless local businesses and startups leveraging Design Thinking to identify unmet customer needs and develop unique value propositions that resonate deeply with their users."
+        },
+        {
+          "title": "Slide 21: Benefits of Adopting Design Thinking",
+          "bullets": [
+            "**Enhanced Innovation:** Creates truly novel and impactful solutions.",
+            "**Improved User Satisfaction:** Products/services directly address user needs.",
+            "**Reduced Risk:** Validating ideas early minimizes costly failures.",
+            "**Faster Time-to-Market:** Iterative cycles accelerate development.",
+            "**Stronger Teams:** Fosters collaboration, empathy, and creative problem-solving."
+          ],
+          "script": "The benefits of adopting Design Thinking are substantial. It leads to enhanced innovation, helping organizations create truly novel and impactful solutions that stand out. It results in improved user satisfaction because the products and services directly address real user needs and pain points. By validating ideas early through prototyping and testing, it significantly reduces the risk of launching costly failures. The iterative nature can also lead to faster time-to-market as you continuously refine. And beyond the output, it fosters stronger teams by promoting collaboration, empathy, and a shared mindset for creative problem-solving."
+        },
+        {
+          "title": "Slide 22: Challenges & Considerations",
+          "bullets": [
+            "**Mindset Shift:** Moving from traditional approaches can be difficult.",
+            "**Time & Resources:** Requires dedicated time for research and iteration.",
+            "**Ambiguity:** Dealing with uncertainty in early stages.",
+            "**Organizational Buy-in:** Gaining support from leadership and different departments.",
+            "**Not a Magic Bullet:** Requires commitment, practice, and adaptation."
+          ],
+          "script": "While powerful, Design Thinking isn't without its challenges. One of the biggest is the mindset shift required, especially for organizations accustomed to more traditional, linear approaches. It requires dedicated time and resources for thorough research and iterative cycles, which can feel slow at first. Embracing ambiguity is key, as the early stages involve a lot of uncertainty. Gaining organizational buy-in from leadership and different departments can also be a hurdle, as it often challenges existing structures. And crucially, it's not a magic bullet. It requires commitment, continuous practice, and thoughtful adaptation to different contexts. It's a journey, not a destination."
+        },
+        {
+          "title": "Slide 23: Recap: The Design Thinking Journey",
+          "bullets": [
+            "**Human-Centered:** Always start and end with the user.",
+            "**Empathize:** Understand their world.",
+            "**Define:** Clearly articulate the problem.",
+            "**Ideate:** Explore diverse solutions.",
+            "**Prototype:** Make ideas tangible and testable.",
+            "**Test:** Learn from feedback and iterate.",
+            "**Iterative & Non-Linear:** A continuous cycle of learning and refining."
+          ],
+          "script": "Let's quickly recap our journey through Design Thinking. Remember, it's always Human-Centered, starting and ending with the user. We begin by deeply Empathizing to understand their world. Then, we Define the core problem clearly. Next, we Ideate, exploring a wide range of diverse solutions. We then Prototype our ideas, making them tangible and testable. Finally, we Test them with users, learning from their feedback, which then feeds back into the entire iterative and non-linear cycle of learning and refining. This process empowers us to create solutions that truly matter."
+        },
+        {
+          "title": "Slide 24: Q&A and Further Resources",
+          "bullets": [
+            "**Questions?**",
+            "**Recommended Reading:**\n    -   'Design Thinking' by Tim Brown\n    -   'Change by Design' by Tim Brown\n    -   'Sprint' by Jake Knapp et al.",
+            "**Online Resources:**\n    -   IDEO.org\n    -   Stanford d.school\n    -   Nielsen Norman Group"
+          ],
+          "script": "That brings us to the end of our introduction to Design Thinking. I hope this session has provided you with a solid foundation. Now, I'd love to open it up for any questions you might have. [Facilitate Q&A]. For those interested in diving deeper, I highly recommend 'Design Thinking' and 'Change by Design' by Tim Brown, CEO of IDEO, and 'Sprint' by Jake Knapp, which offers a practical guide to rapid prototyping. Excellent online resources include IDEO.org, the Stanford d.school, and the Nielsen Norman Group. Thank you all for your engagement and participation today!"
+        }
+      ],
+      "status": "DRAFT",
+      "created_by": "25adb12c-06c0-4eb3-8986-0fead403c392",
+      "created_at": "2026-08-27T17:04:00.332Z",
+      "updated_at": "2026-08-27T17:18:22.875Z"
     }
   ]
 }
