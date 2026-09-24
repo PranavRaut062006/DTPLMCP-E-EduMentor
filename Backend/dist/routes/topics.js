@@ -6,20 +6,19 @@ const db_1 = require("../db");
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
 router.use(auth_1.authMiddleware);
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     const { unitId } = req.query;
-    const db = (0, db_1.readDB)();
-    let topics = db.topics;
-    if (unitId) {
-        topics = topics.filter(t => t.unit_id === unitId);
-    }
+    const db = (0, db_1.getDB)();
+    const topics = await db.collection('topics')
+        .find(unitId ? { unit_id: String(unitId) } : {})
+        .sort({ position: 1 }).toArray();
     res.json(topics);
 });
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const { unit_id, title, subtopics, position } = req.body;
     if (!unit_id || !title)
         return res.status(400).json({ error: 'Missing required fields' });
-    const db = (0, db_1.readDB)();
+    const db = (0, db_1.getDB)();
     const newTopic = {
         id: (0, uuid_1.v4)(),
         unit_id,
@@ -29,17 +28,14 @@ router.post('/', (req, res) => {
         status: 'NOT_GENERATED',
         created_at: new Date().toISOString()
     };
-    db.topics.push(newTopic);
-    (0, db_1.writeDB)(db);
+    await db.collection('topics').insertOne(newTopic);
     res.status(201).json(newTopic);
 });
-router.patch('/:id/status', (req, res) => {
-    const db = (0, db_1.readDB)();
-    const index = db.topics.findIndex(t => t.id === req.params.id);
-    if (index === -1)
+router.patch('/:id/status', async (req, res) => {
+    const db = (0, db_1.getDB)();
+    const result = await db.collection('topics').findOneAndUpdate({ id: req.params.id }, { $set: { status: req.body.status } }, { returnDocument: 'after' });
+    if (!result)
         return res.status(404).json({ error: 'Topic not found' });
-    db.topics[index].status = req.body.status;
-    (0, db_1.writeDB)(db);
-    res.json(db.topics[index]);
+    res.json(result);
 });
 exports.default = router;

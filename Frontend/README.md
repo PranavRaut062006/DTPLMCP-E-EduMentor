@@ -1,908 +1,981 @@
-# Syllabus AI Assistant
+# TeachAI Studio
 
-Build Phase 1 of a web application called "TeachGen AI".
+AI-Powered Content Generator & Mentor — Frontend
 
-PRODUCT:
+Build a complete, professional frontend for an industry-style AI SaaS web application called TeachAI.
 
-TeachGen AI is a faculty-focused e-content generation platform. The primary user is faculty. Students are secondary users who will later consume faculty-approved content.
+The platform is an AI-powered academic content generator and mentor that helps faculty convert syllabus and reference materials into structured teaching content, while allowing students to access the published learning material.
 
-IMPORTANT:
+Design Direction
 
-This is ONLY PHASE 1.
+Create a premium, modern AI-tool interface similar in quality to products like ChatGPT, Notion, Linear, and other modern SaaS platforms.
 
-Do NOT implement voice cloning, voice authentication, RAG, AI-generated audio, quizzes, analytics, LMS integration, mobile app, or advanced AI agents yet.
+Theme
 
-PHASE 1 GOAL:
+Primary theme: Dark 
 
-Build a functional prototype for this workflow:
+Use subtle gradients and glassmorphism where appropriate
 
-Faculty Login
+Clean white/light-gray typography
 
-→ Faculty Dashboard
+Use one elegant accent color for important actions
 
-→ Upload Syllabus PDF
+Avoid excessive colors
 
-→ Extract and display syllabus content
+Rounded cards and buttons
 
-→ Identify Units and Topics
+Subtle borders and shadows
 
-→ Faculty selects a topic
+Smooth hover and transition animations
 
-→ Generate AI lecture content
+Professional spacing and typography
 
-→ Generate PPT content/slide outline
+Responsive on desktop, tablet, and mobile
 
-→ Faculty reviews and edits content
+The interface should feel like a real commercial AI product, not a college project.
 
-→ Faculty approves content
+Brand
 
-→ Approved content becomes visible in Student Portal
+Application name:
 
-==================================================
+TeachAI
 
-1. USER ROLES
+Tagline:
 
-==================================================
+"Turn your syllabus into intelligent learning."
 
-Create two roles:
+Create a simple professional TeachAI logo/icon.
 
-PRIMARY USER:
+The logo should be minimal and modern:
+
+Simple TeachAI silhouette/head
+
+Geometric and clean
+
+Suitable for an AI SaaS product
+
+Should work as both an icon and a small navbar logo
+
+Do not make it cartoonish or childish
+
+Use the TeachAI logo consistently throughout the application.
+
+Authentication
+
+Create professional authentication screens.
+
+Login
+
+Fields:
+
+Email
+
+Password
+
+Options:
+
+Remember me
+
+Forgot password
+
+Sign In
+
+Also provide:
+
+Don't have an account? Create account
+
+Registration
+
+Fields:
+
+Full Name
+
+Email
+
+Password
+
+Confirm Password
+
+Role
+
+Role selection:
 
 Faculty
 
-Faculty can:
-
-- Login
-
-- Upload syllabus
-
-- Create/manage subjects
-
-- View extracted units and topics
-
-- Select a topic
-
-- Generate lecture content
-
-- Generate PPT slide content
-
-- Edit generated content
-
-- Regenerate content
-
-- Approve content
-
-- Publish approved content
-
-- View published content
-
-SECONDARY USER:
-
 Student
 
-Student can:
+Use attractive role-selection cards instead of a plain dropdown.
 
-- Login
+After registration/login, redirect the user to the appropriate dashboard.
 
-- View available subjects
+Landing Page
 
-- View units and topics
-
-- View only faculty-approved content
-
-- View lecture notes
-
-- View PPT/slide content
-
-Students must NOT be able to:
-
-- Generate AI content
-
-- Edit faculty content
-
-- Upload syllabus
-
-- Approve content
-
-==================================================
-
-2. DESIGN
-
-==================================================
-
-Create a modern, professional education SaaS interface.
-
-Style:
-
-- Clean
-
-- Minimal
-
-- Professional
-
-- Academic
-
-- Easy to use
-
-- Responsive
-
-- Desktop-first but mobile-friendly
-
-Use a consistent design system.
-
-Suggested visual direction:
-
-- White/light background
-
-- Dark text
-
-- Blue/indigo primary accent
-
-- Cards with subtle borders
-
-- Rounded corners
-
-- Clear buttons
-
-- Good spacing
-
-- Professional dashboard layout
-
-Do NOT make it look like a generic chatbot.
-
-The application should feel like an institutional faculty productivity platform.
-
-==================================================
-
-3. LANDING PAGE
-
-==================================================
-
-Create a simple landing page.
+Create a professional public landing page for TeachAI.
 
 Hero section:
 
-Title:
+Turn your syllabus into intelligent learning.
 
-"Create Faculty E-Content Faster with AI"
+Supporting text:
 
-Subtitle:
-
-"Transform your official syllabus into structured lecture content and presentation material, with faculty review and approval at every step."
+"TeachAI helps faculty transform syllabi and reference materials into structured teaching plans, presentations, notes, PDFs, and AI-narrated lectures — all within the available teaching time."
 
 Primary CTA:
 
-"Get Started"
+Get Started
 
 Secondary CTA:
 
-"Login"
+Explore Platform
 
-Show a simple 3-step explanation:
+Show a beautiful product dashboard preview/mockup in the hero section.
 
-1. Upload Syllabus
+Add sections:
 
-2. Generate E-Content
+How It Works
 
-3. Review & Publish
+Upload Syllabus
 
-Also show:
+Add References
 
-"For Faculty"
+Set Teaching Duration
 
-"Generate structured teaching content from your syllabus while keeping complete control over the final material."
+Generate Content
 
-==================================================
+Review & Edit
 
-4. AUTHENTICATION
+Publish to Students
 
-==================================================
+AI Capabilities
 
-Create login and registration pages.
+Cards for:
 
-Login fields:
+AI Teaching Plans
 
-- Email
+PPT Generation
 
-- Password
+Notes & PDF Generation
 
-- Role selection: Faculty / Student
+AI Lecture Generation
 
-Registration:
+Faculty Voice
 
-- Name
+Reference-Based Learning
 
-- Email
+Faculty / Student
 
-- Password
+Two separate sections explaining the experience for Faculty and Students.
 
-- Role
+Footer
 
-For Phase 1, use normal authentication.
+Include:
 
-After login:
+TeachAI
 
-Faculty → Faculty Dashboard
+About
 
-Student → Student Dashboard
+Features
 
-Protect routes according to user role.
+Contact
 
-==================================================
+Privacy
 
-5. FACULTY DASHBOARD
+Terms
 
-==================================================
+Faculty Dashboard
 
-Create a faculty dashboard.
+Create a professional dashboard after Faculty login.
 
 Sidebar navigation:
 
 Dashboard
 
-My Subjects
+My Classrooms
 
-Upload Syllabus
+Create Classroom
 
-Generated Content
+Content Generator
 
-Published Content
+Materials
+
+Students
 
 Profile
 
-Dashboard should show:
+Settings
 
-- Total Subjects
+Top navigation:
 
-- Total Topics
+Search
 
-- Draft Content
+Notifications
 
-- Approved Content
+Faculty profile/avatar
 
-Also show a "Recent Subjects" section.
+Dashboard content:
 
-Main CTA:
+Welcome Section
 
-"+ Create Subject"
+"Good morning, Professor"
 
-==================================================
+Subtitle:
 
-6. CREATE SUBJECT
+"Create engaging learning content from your syllabus."
 
-==================================================
-
-Faculty can create a subject.
-
-Fields:
-
-Subject Name
-
-Example:
-
-"Data Structures"
-
-Subject Code
-
-Example:
-
-"CS201"
-
-Department
-
-Semester
-
-Button:
-
-"Create Subject"
-
-After creating the subject, open the subject page.
-
-==================================================
-
-7. UPLOAD SYLLABUS
-
-==================================================
-
-Create an upload interface.
-
-Faculty selects a subject.
-
-Upload:
-
-- PDF syllabus
+Statistics Cards
 
 Show:
 
-"Upload Official Syllabus"
+Total Classrooms
 
-Supported format:
+Published Materials
+
+Students
+
+Generated Content
+
+Recent Classrooms
+
+Display classroom cards with:
+
+Subject name
+
+Class code
+
+Number of students
+
+Number of materials
+
+Last updated
+
+Open Classroom button
+
+Quick Actions
+
+Buttons:
+
+Create Classroom
+
+Generate Content
+
+Upload Reference
+
+View Materials
+
+Create Classroom
+
+Create a clean form.
+
+Fields:
+
+Classroom Name
+
+Subject
+
+Description
+
+Academic Year
+
+Department / Course
+
+Generate a unique:
+
+Class Code
+
+After creation, show the classroom dashboard.
+
+Classroom Dashboard
+
+Show:
+
+Classroom name
+
+Subject
+
+Class code
+
+Student count
+
+Tabs:
+
+Overview
+
+Syllabus
+
+Materials
+
+Students
+
+Overview should show:
+
+Recent activity
+
+Published content
+
+Upcoming teaching topics
+
+Syllabus Management
+
+Create an interface where Faculty can:
+
+Upload complete syllabus PDF
+
+Upload document
+
+Enter syllabus manually
+
+Add Unit
+
+Add Topic
+
+Edit topic
+
+Delete topic
+
+Display syllabus hierarchically:
+
+Unit I
+
+├── Topic 1
+
+├── Topic 2
+
+└── Topic 3
+
+Unit II
+
+├── Topic 1
+
+└── Topic 2
+
+Provide buttons:
+
+Add Unit
+
+Add Topic
+
+Upload Syllabus
+
+AI Content Generator
+
+This is one of the most important screens.
+
+Create a professional multi-step content generation interface.
+
+Step 1 — Select Classroom
+
+Select the classroom/course.
+
+Step 2 — Select Topics
+
+Display syllabus tree with checkboxes.
+
+Example (it's just an example don't use it as placeholder or inbuilt data):
+
+☑ Unit I — Design Thinking for Product Innovation
+
+☑ Introduction to Innovation
+
+☑ Need for Product Development
+
+☑ Design Thinking
+
+☑ Human-Centered Product Design
+
+☑ Five Stages of Design Thinking
+
+☑ Customer Need Analysis
+
+Step 3 — Teaching Duration
+
+Allow Faculty to specify:
+
+Teaching Duration
+
+Example:
+
+4 Hours
+
+Provide a slider and manual input.
+
+Step 4 — Reference Materials
+
+Allow:
+
+Upload PDF
+
+Upload DOCX
+
+Upload PPT
+
+Add book reference
+
+Add website reference
+
+Add YouTube URL
+
+Show uploaded references as cards.
+
+Step 5 — Content Selection
+
+Allow Faculty to choose what AI should generate:
+
+☑ Teaching Plan
+
+☑ PPT Presentation
+
+☑ Lecture Notes
+
+☑ PDF
+
+☑ Lecture Script
+
+☑ Video Lecture
+
+Generate
+
+Large primary button:
+
+Generate Learning Content
+
+Show an attractive AI generation/loading state.
+
+Example:
+
+"Analyzing syllabus..."
+
+"Reading reference materials..."
+
+"Creating teaching structure..."
+
+"Generating lecture content..."
+
+"Preparing learning materials..."
+
+AI Generation Result
+
+After generation, show a professional content workspace.
+
+Header:
+
+AI Generated Learning Package
+
+Show:
+
+Teaching duration
+
+Topics covered
+
+References used
+
+Generation status
+
+Tabs:
+
+Teaching Plan
+
+PPT
+
+Notes
 
 PDF
 
-After upload:
+Lecture Script
 
-1. Store the file
+Video
 
-2. Extract text from the PDF
+Provide actions:
 
-3. Display extracted text
-
-4. Run syllabus analysis
-
-5. Extract:
-
-   - Subject
-
-   - Units
-
-   - Topics
-
-   - Subtopics if available
-
-Show processing states:
-
-Uploading...
-
-Extracting syllabus...
-
-Analyzing syllabus...
-
-Creating topic structure...
-
-Completed
-
-==================================================
-
-8. SYLLABUS STRUCTURE
-
-==================================================
-
-After processing, display:
-
-Subject
-
-↓
-
-Unit 1
-
-  ├── Topic 1
-
-  ├── Topic 2
-
-  └── Topic 3
-
-Unit 2
-
-  ├── Topic 1
-
-  ├── Topic 2
-
-  └── Topic 3
-
-etc.
-
-Use expandable/collapsible unit cards.
-
-Each topic should have:
-
-Topic Name
-
-Status:
-
-- Not Generated
-
-- Draft
-
-- Approved
-
-Button:
-
-"Generate Content"
-
-Important:
-
-The syllabus is the source for the topic structure.
-
-Do not invent random topics if the syllabus extraction does not find them.
-
-==================================================
-
-9. TOPIC PAGE
-
-==================================================
-
-When faculty selects a topic, show:
-
-Subject
-
-Unit
-
-Topic
-
-Example:
-
-Data Structures
-
-Unit 3
-
-Binary Search Tree
-
-Show buttons:
-
-"Generate Lecture Content"
-
-"Generate PPT"
-
-Initially these can be separate actions.
-
-==================================================
-
-10. AI LECTURE CONTENT GENERATION
-
-==================================================
-
-Create an AI content generation workflow.
-
-Input:
-
-- Official syllabus context
-
-- Unit
-
-- Topic
-
-- Extracted syllabus information
-
-Generate structured lecture content.
-
-The output should contain:
-
-1. Topic Title
-
-2. Learning Objectives
-
-3. Introduction
-
-4. Concept Explanation
-
-5. Important Points
-
-6. Examples
-
-7. Applications
-
-8. Summary
-
-9. Important Questions
-
-Keep the generated content educational and easy for faculty to review.
-
-IMPORTANT:
-
-The AI should be instructed to stay grounded in the supplied syllabus context.
-
-Do not generate unrelated topics.
-
-If information is missing from the syllabus, clearly indicate that additional reference material may be required instead of pretending the information came from the syllabus.
-
-==================================================
-
-11. PPT GENERATION
-
-==================================================
-
-For Phase 1, do NOT create a complicated visual presentation generator.
-
-Generate a structured PPT slide outline.
-
-Example:
-
-Slide 1:
-
-Topic Title
-
-Slide 2:
-
-Learning Objectives
-
-Slide 3:
-
-Introduction
-
-Slide 4:
-
-Core Concept
-
-Slide 5:
-
-Example
-
-Slide 6:
-
-Applications
-
-Slide 7:
-
-Summary
-
-Slide 8:
-
-Important Questions
-
-Each slide should contain:
-
-- Slide title
-
-- Main points
-
-- Optional speaker notes
-
-Show the generated slides in a presentation-style preview.
-
-Add:
-
-"Download PPT"
-
-If actual PPT generation is supported by the backend, generate a .pptx file.
-
-Otherwise create the slide structure first and keep the download button ready for the backend implementation.
-
-==================================================
-
-12. FACULTY REVIEW
-
-==================================================
-
-This is a CORE feature.
-
-Never automatically publish AI-generated content.
-
-After generation, show:
-
-"AI Generated Draft"
-
-Faculty can:
-
-- Edit
-
-- Regenerate
-
-- Save Draft
-
-- Approve
-
-Show a clear status:
-
-DRAFT
-
-UNDER REVIEW
-
-APPROVED
-
-PUBLISHED
-
-The faculty must click:
-
-"Approve & Publish"
-
-before students can see the content.
-
-==================================================
-
-13. CONTENT EDITOR
-
-==================================================
-
-Create a simple editor for generated lecture content.
-
-Faculty should be able to edit:
-
-- Title
-
-- Learning objectives
-
-- Explanation
-
-- Examples
-
-- Summary
-
-- Questions
-
-Add buttons:
-
-Save Changes
+Edit
 
 Regenerate
 
+Download
+
+Preview
+
 Approve & Publish
 
-==================================================
+Teaching Plan
 
-14. STUDENT DASHBOARD
+Display a timeline.
 
-==================================================
+Example:
 
-Create a separate student dashboard.
+00:00 – 00:20
+
+Introduction to Innovation
+
+00:20 – 00:50
+
+Need for Product Development
+
+00:50 – 01:30
+
+Design Thinking
+
+01:30 – 02:00
+
+Human-Centered Design
+
+etc.
+
+Make the timeline visually attractive.
+
+PPT Preview
+
+Create a slide-preview interface.
+
+Left side:
+
+Slide thumbnails
+
+Center:
+
+Large selected slide preview
+
+Right side:
+
+Slide information / editing controls
+
+Buttons:
+
+Edit Slide
+
+Regenerate Slide
+
+Add Slide
+
+Delete Slide
+
+Notes / PDF Preview
+
+Provide a document-style preview.
+
+Actions:
+
+Edit
+
+Regenerate
+
+Download PDF
+
+Lecture Script
+
+Show the generated lecture script with sections.
+
+Example:
+
+Introduction
+
+"Good morning everyone. Today we are going to learn about..."
+
+Actions:
+
+Edit Script
+
+Regenerate Section
+
+Generate Voice
+
+Video Lecture
+
+Create a professional video-generation interface.
+
+Show:
+
+Video preview area
+
+Below it:
+
+Voice
+
+AI Voice
+
+Faculty Voice
+
+Speaking Speed
+
+Slow
+
+Normal
+
+Fast
+
+Lecture Duration
+
+Generate Lecture Video
+
+Show generation progress.
+
+After generation:
+
+Preview Video
+
+Download
+
+Publish
+
+Do not implement actual AI video generation yet. Build the complete UI so that the backend/API can be connected later.
+
+Faculty Review & Publishing
+
+Before publishing, show a review page.
+
+Checklist:
+
+✓ Teaching Plan
+
+✓ PPT
+
+✓ Notes
+
+✓ PDF
+
+✓ Lecture Script
+
+✓ Video
+
+Buttons:
+
+Save Draft
+
+Publish to Classroom
+
+After publishing show:
+
+"Learning package published successfully."
+
+Students in that classroom can now access it.
+
+Student Dashboard
+
+Create a separate student experience.
 
 Sidebar:
 
 Dashboard
 
-My Subjects
+My Classrooms
 
-Published Content
+Learning Materials
+
+Assignments
 
 Profile
 
-Show available subjects.
+Settings
+
+Dashboard:
+
+Welcome
+
+"Welcome back!"
+
+Show:
+
+Enrolled Classes
+
+Available Materials
+
+Recently Published Content
+
+Learning Progress
+
+Join Classroom
+
+Provide:
+
+Enter Class Code
 
 Example:
 
-Data Structures
+ABC123
 
-Machine Learning
+Button:
 
-Database Management Systems
+Join Classroom
 
-When student selects a subject:
+Show joined classrooms as cards.
 
-Unit 1
+Student Classroom
 
-Unit 2
+Show:
 
-Unit 3
+Subject
 
-...
+Faculty
 
-When student selects a topic, show ONLY approved/published content.
+Description
 
-Student should see:
+Class information
 
-Lecture Notes
+Tabs:
 
-PPT
+Overview
 
-Do NOT show draft or unapproved content.
+Learning Materials
 
-==================================================
+Teaching Plan
 
-15. DATABASE
+Learning material cards:
 
-==================================================
+📄 Lecture Notes
 
-Create database structure for:
+📊 Presentation
 
-users
+📕 PDF
 
-- id
+🎥 Video Lecture
 
-- name
+Each card should have:
 
-- email
+View
 
-- role
+Download
 
-- created_at
+Video Learning Page
 
-subjects
+Create a professional video-learning interface.
 
-- id
+Large video player.
 
-- faculty_id
+Below:
 
-- name
+Lecture title
 
-- code
+Description
 
-- department
+Topics covered
 
-- semester
+Teaching duration
 
-syllabi
+Reference materials
 
-- id
+Sidebar:
 
-- subject_id
+Course Contents
 
-- file_url
+Unit I
 
-- extracted_text
+Topic 1 ✓
 
-- created_at
+Topic 2
 
-units
+Topic 3
 
-- id
+Profile & Settings
 
-- subject_id
+Create settings pages for both Faculty and Students.
 
-- unit_number
+Profile:
 
-- title
+Name
 
-topics
+Email
 
-- id
+Role
 
-- unit_id
+Profile picture
 
-- title
+Faculty-specific:
 
-- status
+Voice Profile
 
-content
+UI for:
 
-- id
+Upload voice sample
 
-- topic_id
+Voice profile status
 
-- lecture_content
+Delete voice profile
 
-- ppt_content
+Include a clear consent message:
 
-- status
+"Faculty voice generation requires explicit consent."
 
-- created_by
+Do not implement the voice cloning functionality yet.
 
-- created_at
+Important UI/UX Requirements
 
-- updated_at
+Make the application fully responsive.
 
-Use relationships between these tables.
+Use:
 
-==================================================
+Modern sidebar
 
-16. CONTENT STATUS
+Breadcrumbs
 
-==================================================
+Cards
 
-Use this workflow:
+Modals
 
-NOT_GENERATED
+Toast notifications
 
-↓
+Loading skeletons
 
-DRAFT
+Empty states
 
-↓
+Confirmation dialogs
 
-UNDER_REVIEW
+Progress indicators
 
-↓
+Use realistic sample data so the UI looks complete even before the backend is connected.
 
-APPROVED
+Use reusable components throughout the application.
 
-↓
+Create clear API/service placeholders so backend functionality can be connected later.
 
-PUBLISHED
+Do NOT hardcode the application architecture in a way that makes backend integration difficult.
 
-Students can access ONLY:
+The frontend should be structured so we can later connect:
 
-PUBLISHED
+Authentication API
 
-Faculty can access all their own content.
+Classroom API
 
-==================================================
+Syllabus upload API
 
-17. SECURITY
+Reference/document processing API
 
-==================================================
+Gemini/LLM API
 
-Implement role-based access.
+PPT generation API
 
-Faculty:
+PDF generation API
 
-- Can access only their subjects/content.
+Text-to-speech API
 
-Students:
+Video generation pipeline
 
-- Can access only published content.
+Database
 
-Students cannot:
+File storage
 
-- Modify content
+Overall Goal
 
-- Generate content
+The final result should look like a production-ready AI education SaaS platform called TeachAI.
 
-- Approve content
+It should feel similar to a modern AI startup product — clean, minimal, premium, dark, professional, and highly usable.
 
-- Upload syllabus
+Prioritize UI quality, consistency, responsiveness, and scalability.
 
-Protect all routes.
+Important: No Placeholder or Hardcoded Data
 
-==================================================
+Do NOT use fake, placeholder, mock, demo, or hardcoded user data anywhere in the application.
 
-18. IMPORTANT PHASE 1 LIMITATIONS
+The UI should contain only:
 
-==================================================
+Empty states when no data exists
 
-DO NOT implement these yet:
+Forms for the user to enter data
 
-- Voice cloning
+Dynamic data fetched from the backend/database
 
-- Faculty voice authentication
+Dynamic content generated through APIs
 
-- Voice biometric verification
+Do not pre-fill:
 
-- Audio generation
+Faculty names
 
-- Cryptographic voice tokens
+Student names
 
-- Audio watermarking
+Classroom names
 
-- RAG knowledge base
+Class codes
 
-- Multi-agent architecture
+Subjects
 
-- CrewAI
+Syllabus topics
 
-- Automatic quizzes
+Statistics
 
-- Student personalization
+Learning materials
 
-- Analytics
+Notifications
 
-- LMS integration
+Profile information
 
-- Automatic video generation
+Generated content
 
-- Mobile application
+Do not create fake/sample classrooms, students, courses, PDFs, PPTs, videos, or AI-generated content.
 
-These are planned for future phases.
+All values shown in the dashboard and other pages must come from the authenticated user's actual data or backend API responses.
 
-==================================================
+If data is not available, show a professional empty state such as:
 
-19. PHASE 1 SUCCESS CRITERIA
+"Create your first classroom to get started."
 
-==================================================
+Use loading skeletons while fetching data and proper empty/error states when data is unavailable.
 
-Phase 1 is successful when this complete workflow works:
+All the examples give are just for example does not mean you have to put sample/inbuilt data there
 
-1. Faculty creates a subject
+Keep the frontend architecture ready for real backend API integration. Do not implement fake API responses or simulated backend data.
 
-2. Faculty uploads a real syllabus PDF
+ROLE-BASED ACCESS
 
-3. System extracts syllabus text
+The application has two roles:
 
-4. System identifies units/topics
+- FACULTY
 
-5. Faculty sees the structured syllabus
+- STUDENT
 
-6. Faculty selects a topic
+After authentication, the user's role determines the dashboard and available routes.
 
-7. AI generates lecture content
+Faculty-only routes must not be accessible to students.
 
-8. AI generates PPT slide structure
+Student-only routes must not be accessible to faculty unless explicitly required.
 
-9. Faculty edits the generated content
+Implement route protection using an authentication/authorization layer rather than only hiding navigation items.
 
-10. Faculty approves it
+The frontend should obtain the authenticated user's role from the authentication system/backend and never assume a role from hardcoded data.
 
-11. Content becomes PUBLISHED
+## CRITICAL: FRONTEND ONLY
 
-12. Student logs in
+For this request, build **ONLY the frontend/UI**.
 
-13. Student sees the subject
+Do NOT build, configure, or implement:
 
-14. Student sees the published topic
+* Backend
 
-15. Student can read the approved content
+* Database
 
-16. Student can view/download the PPT
+* Authentication backend
 
-Use realistic sample data so the application is immediately testable.
+* API integrations
 
-Build the complete frontend, backend/database structure, authentication, role-based access, syllabus upload flow, syllabus parsing workflow, AI generation workflow, review/approval workflow, and student viewing workflow.
+* AI/LLM APIs
 
-Keep the architecture modular because Phase 2 will later add RAG, AI evaluation, and authorized faculty voice generation.
+* Gemini API
+
+* File storage
+
+* Text-to-speech
+
+* Speech-to-text
+
+* Video generation
+
+* Server-side logic
+
+Do NOT create mock APIs, fake API responses, simulated backend services, or database data.
+
+Focus only on creating the complete, polished, responsive frontend and UI/UX for all the screens and user flows described above.
+
+Use proper frontend components, routing, forms, states, and reusable UI components so that I can connect a separate backend later.
+
+**Do not spend credits implementing backend functionality. Stop at the frontend layer.**
+
+
+when I say backend I mean build a frontend which is suitable for this backend don't create backend
 
 This project was built with [Lovable](https://lovable.dev).
 
+**Live app**: https://teachflow-ai-97.lovable.app
+
 ## Build with Lovable
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/204b487f-62f6-48c9-b3cd-409245657336).
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/67628b84-819c-4afd-b4f5-6321ce478391).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
 - **Stay in sync**: every change made in Lovable is committed straight to this repository.

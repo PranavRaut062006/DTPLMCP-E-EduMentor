@@ -6,27 +6,18 @@ const db_1 = require("../db");
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
 router.use(auth_1.authMiddleware);
-router.get('/:topicId', (req, res) => {
-    const db = (0, db_1.readDB)();
-    const content = db.content.find(c => c.topic_id === req.params.topicId);
+router.get('/:topicId', async (req, res) => {
+    const db = (0, db_1.getDB)();
+    const content = await db.collection('content').findOne({ topic_id: req.params.topicId });
     if (!content)
         return res.status(404).json({ error: 'Content not found' });
     res.json(content);
 });
-router.post('/:topicId', (req, res) => {
+router.post('/:topicId', async (req, res) => {
     const { lecture_content, ppt_content, status } = req.body;
-    const db = (0, db_1.readDB)();
-    let contentIndex = db.content.findIndex(c => c.topic_id === req.params.topicId);
-    if (contentIndex !== -1) {
-        db.content[contentIndex] = {
-            ...db.content[contentIndex],
-            lecture_content: lecture_content || db.content[contentIndex].lecture_content,
-            ppt_content: ppt_content || db.content[contentIndex].ppt_content,
-            status: status || db.content[contentIndex].status,
-            updated_at: new Date().toISOString()
-        };
-    }
-    else {
+    const db = (0, db_1.getDB)();
+    const existing = await db.collection('content').findOne({ topic_id: req.params.topicId });
+    if (!existing) {
         const newContent = {
             id: (0, uuid_1.v4)(),
             topic_id: req.params.topicId,
@@ -37,10 +28,15 @@ router.post('/:topicId', (req, res) => {
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
         };
-        db.content.push(newContent);
-        contentIndex = db.content.length - 1;
+        await db.collection('content').insertOne(newContent);
+        return res.json(newContent);
     }
-    (0, db_1.writeDB)(db);
-    res.json(db.content[contentIndex]);
+    const updated = await db.collection('content').findOneAndUpdate({ topic_id: req.params.topicId }, { $set: {
+            lecture_content: lecture_content || existing.lecture_content,
+            ppt_content: ppt_content || existing.ppt_content,
+            status: status || existing.status,
+            updated_at: new Date().toISOString(),
+        } }, { returnDocument: 'after' });
+    res.json(updated);
 });
 exports.default = router;

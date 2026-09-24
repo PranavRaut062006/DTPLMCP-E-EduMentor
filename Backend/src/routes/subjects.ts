@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
 import { PDFParse } from 'pdf-parse';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { readDB, writeDB, Subject, Unit, Topic } from '../db';
+import { getDB, Subject, Unit, Topic } from '../db';
 import { authMiddleware } from '../middleware/auth';
 
 const router = Router();
@@ -11,19 +11,18 @@ router.use(authMiddleware);
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-router.get('/', (req: any, res) => {
-  const db = readDB();
-  const subjects = req.user.role === 'student'
-    ? db.subjects
-    : db.subjects.filter(s => s.faculty_id === req.user.id);
+router.get('/', async (req: any, res) => {
+  const db = getDB();
+  const subjects = await db.collection<Subject>('subjects')
+    .find(req.user.role === 'student' ? {} : { faculty_id: req.user.id }).toArray();
   res.json(subjects);
 });
 
-router.post('/', (req: any, res) => {
+router.post('/', async (req: any, res) => {
   const { name, code, department, semester } = req.body;
   if (!name || !code) return res.status(400).json({ error: 'Name and code are required' });
 
-  const db = readDB();
+  const db = getDB();
   const newSubject: Subject = {
     id: uuidv4(),
     faculty_id: req.user.id,
@@ -34,14 +33,13 @@ router.post('/', (req: any, res) => {
     created_at: new Date().toISOString()
   };
 
-  db.subjects.push(newSubject);
-  writeDB(db);
+  await db.collection<Subject>('subjects').insertOne(newSubject);
   res.status(201).json(newSubject);
 });
 
-router.get('/:id', (req: any, res) => {
-  const db = readDB();
-  const subject = db.subjects.find(s => s.id === req.params.id);
+router.get('/:id', async (req: any, res) => {
+  const db = getDB();
+  const subject = await db.collection<Subject>('subjects').findOne({ id: req.params.id });
   if (!subject) return res.status(404).json({ error: 'Subject not found' });
   if (req.user.role === 'faculty' && subject.faculty_id !== req.user.id) {
     return res.status(403).json({ error: 'Access denied' });
@@ -52,8 +50,8 @@ router.get('/:id', (req: any, res) => {
 router.post('/:id/syllabus', upload.single('syllabus'), async (req: any, res) => {
   try {
     const subjectId = req.params.id;
-    const db = readDB();
-    const subject = db.subjects.find(s => s.id === subjectId);
+    const db = getDB();
+    const subject = await db.collection<Subject>('subjects').findOne({ id: subjectId });
     
     if (!subject) return res.status(404).json({ error: 'Subject not found' });
     if (subject.faculty_id !== req.user.id) return res.status(403).json({ error: 'Access denied' });
@@ -114,7 +112,7 @@ router.post('/:id/syllabus', upload.single('syllabus'), async (req: any, res) =>
         title: u.title,
         created_at: new Date().toISOString()
       };
-      db.units.push(newUnit);
+      await db.collection<Unit>('units').insertOne(newUnit);
       
       let topicPosition = 1;
       if (u.topics && Array.isArray(u.topics)) {
@@ -128,13 +126,12 @@ router.post('/:id/syllabus', upload.single('syllabus'), async (req: any, res) =>
             status: 'NOT_GENERATED',
             created_at: new Date().toISOString()
           };
-          db.topics.push(newTopic);
+          await db.collection<Topic>('topics').insertOne(newTopic);
         }
       }
       positionCounter++;
     }
 
-    writeDB(db);
     res.json({ message: 'Syllabus parsed and structure created successfully', units: unitsData.length });
     
   } catch (error: any) {

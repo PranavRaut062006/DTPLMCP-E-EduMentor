@@ -25,6 +25,5 @@ const csrfMiddleware = createCsrfMiddleware({
 });
 
 export const startInstance = createStart(() => ({
-  functionMiddleware: [],
   requestMiddleware: [errorMiddleware, csrfMiddleware],
 }));

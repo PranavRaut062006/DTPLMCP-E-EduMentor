@@ -1,26 +1,25 @@
 import { Router } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { readDB, writeDB, Unit } from '../db';
+import { getDB, Unit } from '../db';
 import { authMiddleware } from '../middleware/auth';
 
 const router = Router();
 router.use(authMiddleware);
 
-router.get('/', (req: any, res) => {
+router.get('/', async (req: any, res) => {
   const { subjectId } = req.query;
-  const db = readDB();
-  let units = db.units;
-  if (subjectId) {
-    units = units.filter(u => u.subject_id === subjectId);
-  }
+  const db = getDB();
+  const units = await db.collection<Unit>('units')
+    .find(subjectId ? { subject_id: String(subjectId) } : {})
+    .sort({ unit_number: 1 }).toArray();
   res.json(units);
 });
 
-router.post('/', (req: any, res) => {
+router.post('/', async (req: any, res) => {
   const { subject_id, unit_number, title } = req.body;
   if (!subject_id || !title) return res.status(400).json({ error: 'Missing required fields' });
 
-  const db = readDB();
+  const db = getDB();
   const newUnit: Unit = {
     id: uuidv4(),
     subject_id,
@@ -29,8 +28,7 @@ router.post('/', (req: any, res) => {
     created_at: new Date().toISOString()
   };
 
-  db.units.push(newUnit);
-  writeDB(db);
+  await db.collection<Unit>('units').insertOne(newUnit);
   res.status(201).json(newUnit);
 });
 

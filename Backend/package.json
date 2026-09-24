@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "nodemon --exec tsx src/server.ts",
-    "build": "tsc"
+    "dev": "npm run build && node dist/server.js",
+    "build": "tsc",
+    "migrate:json": "node scripts/migrate-json-to-mongodb.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,7 @@
     "fluent-ffmpeg": "^2.1.3",
     "google-tts-api": "^2.0.2",
     "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.6.0",
     "multer": "^2.2.0",
     "pdf-parse": "^2.4.5",
     "uuid": "^14.0.2"

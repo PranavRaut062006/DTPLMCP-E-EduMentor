@@ -1,10 +1,47 @@
-import fs from 'fs';
-import path from 'path';
+import { MongoClient, Db } from 'mongodb';
 
-const DB_PATH = path.join(__dirname, '../data/db.json');
+let client: MongoClient | null = null;
+let dbInstance: Db | null = null;
 
+export const connectDB = async (): Promise<void> => {
+  // Read this at startup, after dotenv.config() has loaded Backend/.env.
+  const mongodbUri = process.env.MONGODB_URI;
+  if (!mongodbUri) {
+    console.error('MONGODB_URI is not defined in .env! (Please paste it there)');
+    process.exit(1);
+  }
+  try {
+    client = new MongoClient(mongodbUri);
+    await client.connect();
+    dbInstance = client.db(process.env.MONGODB_DB || undefined);
+    await Promise.all([
+      dbInstance.collection<User>('users').createIndex({ id: 1 }, { unique: true }),
+      dbInstance.collection<User>('users').createIndex({ email: 1 }, { unique: true }),
+      dbInstance.collection<Subject>('subjects').createIndex({ id: 1 }, { unique: true }),
+      dbInstance.collection<Unit>('units').createIndex({ id: 1 }, { unique: true }),
+      dbInstance.collection<Unit>('units').createIndex({ subject_id: 1, unit_number: 1 }),
+      dbInstance.collection<Topic>('topics').createIndex({ id: 1 }, { unique: true }),
+      dbInstance.collection<Topic>('topics').createIndex({ unit_id: 1, position: 1 }),
+      dbInstance.collection<Content>('content').createIndex({ id: 1 }, { unique: true }),
+      dbInstance.collection<Content>('content').createIndex({ topic_id: 1 }, { unique: true }),
+    ]);
+    console.log('Connected to MongoDB successfully');
+  } catch (error) {
+    console.error('Failed to connect to MongoDB:', error);
+    process.exit(1);
+  }
+};
+
+export const getDB = (): Db => {
+  if (!dbInstance) {
+    throw new Error('Database not connected. Call connectDB first.');
+  }
+  return dbInstance;
+};
+
+// Keep interfaces for type safety in other files
 export interface User {
-  id: string;
+  id: string; // we'll use string 'id' for compatibility instead of ObjectId '_id'
   name: string;
   email: string;
   password?: string;
@@ -41,6 +78,7 @@ export interface Topic {
 
 export interface Content {
   id: string;
+  subject_id?: string;
   topic_id: string;
   lecture_content: any; // e.g. lecture scripts, markdown
   ppt_content: any;     // structured ppt data
@@ -49,37 +87,3 @@ export interface Content {
   created_at: string;
   updated_at: string;
 }
-
-export interface Database {
-  users: User[];
-  subjects: Subject[];
-  units: Unit[];
-  topics: Topic[];
-  content: Content[];
-}
-
-const defaultDb: Database = {
-  users: [],
-  subjects: [],
-  units: [],
-  topics: [],
-  content: []
-};
-
-export const readDB = (): Database => {
-  if (!fs.existsSync(DB_PATH)) {
-    fs.writeFileSync(DB_PATH, JSON.stringify(defaultDb, null, 2), 'utf-8');
-    return defaultDb;
-  }
-  try {
-    const data = fs.readFileSync(DB_PATH, 'utf-8');
-    return JSON.parse(data);
-  } catch (err) {
-    console.error('Error reading db.json:', err);
-    return defaultDb;
-  }
-};
-
-export const writeDB = (db: Database): void => {
-  fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2), 'utf-8');
-};

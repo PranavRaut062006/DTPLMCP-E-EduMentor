@@ -10,156 +10,279 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedFacultyRouteImport } from './routes/_authenticated/faculty'
-import { Route as AuthenticatedStudentRouteImport } from './routes/_authenticated/student'
-import { Route as AuthenticatedFacultyIndexRouteImport } from './routes/_authenticated/faculty.index'
-import { Route as AuthenticatedStudentIndexRouteImport } from './routes/_authenticated/student.index'
-import { Route as AuthenticatedFacultySubjectsIndexRouteImport } from './routes/_authenticated/faculty.subjects.index'
-import { Route as AuthenticatedFacultySubjectsSubjectIdRouteImport } from './routes/_authenticated/faculty.subjects.$subjectId'
-import { Route as AuthenticatedFacultyTopicsTopicIdRouteImport } from './routes/_authenticated/faculty.topics.$topicId'
-import { Route as AuthenticatedStudentSubjectsSubjectIdRouteImport } from './routes/_authenticated/student.subjects.$subjectId'
+import { Route as FacultyRouteImport } from './routes/faculty'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as StudentRouteImport } from './routes/student'
+import { Route as FacultyIndexRouteImport } from './routes/faculty.index'
+import { Route as FacultyGenerateRouteImport } from './routes/faculty.generate'
+import { Route as FacultyProfileRouteImport } from './routes/faculty.profile'
+import { Route as FacultySettingsRouteImport } from './routes/faculty.settings'
+import { Route as StudentIndexRouteImport } from './routes/student.index'
+import { Route as StudentJoinRouteImport } from './routes/student.join'
+import { Route as StudentProfileRouteImport } from './routes/student.profile'
+import { Route as StudentSettingsRouteImport } from './routes/student.settings'
+import { Route as FacultyClassroomsIndexRouteImport } from './routes/faculty.classrooms.index'
+import { Route as FacultyClassroomsIdRouteImport } from './routes/faculty.classrooms.$id'
+import { Route as FacultyMaterialsIndexRouteImport } from './routes/faculty.materials.index'
+import { Route as FacultyMaterialsIdRouteImport } from './routes/faculty.materials.$id'
+import { Route as StudentMaterialsIndexRouteImport } from './routes/student.materials.index'
+import { Route as StudentMaterialsIdRouteImport } from './routes/student.materials.$id'
+import { Route as FacultyClassroomsIdSyllabusRouteImport } from './routes/faculty.classrooms.$id.syllabus'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedFacultyRoute = AuthenticatedFacultyRouteImport.update({
+const FacultyRoute = FacultyRouteImport.update({
   id: '/faculty',
   path: '/faculty',
-  getParentRoute: () => AuthenticatedRouteRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedStudentRoute = AuthenticatedStudentRouteImport.update({
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentRoute = StudentRouteImport.update({
   id: '/student',
   path: '/student',
-  getParentRoute: () => AuthenticatedRouteRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedFacultyIndexRoute =
-  AuthenticatedFacultyIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedFacultyRoute,
-  } as any)
-const AuthenticatedStudentIndexRoute =
-  AuthenticatedStudentIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedStudentRoute,
-  } as any)
-const AuthenticatedFacultySubjectsIndexRoute =
-  AuthenticatedFacultySubjectsIndexRouteImport.update({
-    id: '/subjects/',
-    path: '/subjects/',
-    getParentRoute: () => AuthenticatedFacultyRoute,
-  } as any)
-const AuthenticatedFacultySubjectsSubjectIdRoute =
-  AuthenticatedFacultySubjectsSubjectIdRouteImport.update({
-    id: '/subjects/$subjectId',
-    path: '/subjects/$subjectId',
-    getParentRoute: () => AuthenticatedFacultyRoute,
-  } as any)
-const AuthenticatedFacultyTopicsTopicIdRoute =
-  AuthenticatedFacultyTopicsTopicIdRouteImport.update({
-    id: '/topics/$topicId',
-    path: '/topics/$topicId',
-    getParentRoute: () => AuthenticatedFacultyRoute,
-  } as any)
-const AuthenticatedStudentSubjectsSubjectIdRoute =
-  AuthenticatedStudentSubjectsSubjectIdRouteImport.update({
-    id: '/subjects/$subjectId',
-    path: '/subjects/$subjectId',
-    getParentRoute: () => AuthenticatedStudentRoute,
+const FacultyIndexRoute = FacultyIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const FacultyGenerateRoute = FacultyGenerateRouteImport.update({
+  id: '/generate',
+  path: '/generate',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const FacultyProfileRoute = FacultyProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const FacultySettingsRoute = FacultySettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const StudentIndexRoute = StudentIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentJoinRoute = StudentJoinRouteImport.update({
+  id: '/join',
+  path: '/join',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentProfileRoute = StudentProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentSettingsRoute = StudentSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => StudentRoute,
+} as any)
+const FacultyClassroomsIndexRoute = FacultyClassroomsIndexRouteImport.update({
+  id: '/classrooms/',
+  path: '/classrooms/',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const FacultyClassroomsIdRoute = FacultyClassroomsIdRouteImport.update({
+  id: '/classrooms/$id',
+  path: '/classrooms/$id',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const FacultyMaterialsIndexRoute = FacultyMaterialsIndexRouteImport.update({
+  id: '/materials/',
+  path: '/materials/',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const FacultyMaterialsIdRoute = FacultyMaterialsIdRouteImport.update({
+  id: '/materials/$id',
+  path: '/materials/$id',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const StudentMaterialsIndexRoute = StudentMaterialsIndexRouteImport.update({
+  id: '/materials/',
+  path: '/materials/',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentMaterialsIdRoute = StudentMaterialsIdRouteImport.update({
+  id: '/materials/$id',
+  path: '/materials/$id',
+  getParentRoute: () => StudentRoute,
+} as any)
+const FacultyClassroomsIdSyllabusRoute =
+  FacultyClassroomsIdSyllabusRouteImport.update({
+    id: '/syllabus',
+    path: '/syllabus',
+    getParentRoute: () => FacultyClassroomsIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
-  '/faculty': typeof AuthenticatedFacultyRouteWithChildren
-  '/student': typeof AuthenticatedStudentRouteWithChildren
-  '/faculty/': typeof AuthenticatedFacultyIndexRoute
-  '/student/': typeof AuthenticatedStudentIndexRoute
-  '/faculty/subjects/$subjectId': typeof AuthenticatedFacultySubjectsSubjectIdRoute
-  '/faculty/topics/$topicId': typeof AuthenticatedFacultyTopicsTopicIdRoute
-  '/student/subjects/$subjectId': typeof AuthenticatedStudentSubjectsSubjectIdRoute
-  '/faculty/subjects/': typeof AuthenticatedFacultySubjectsIndexRoute
+  '/faculty': typeof FacultyRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/student': typeof StudentRouteWithChildren
+  '/faculty/generate': typeof FacultyGenerateRoute
+  '/faculty/profile': typeof FacultyProfileRoute
+  '/faculty/settings': typeof FacultySettingsRoute
+  '/student/join': typeof StudentJoinRoute
+  '/student/profile': typeof StudentProfileRoute
+  '/student/settings': typeof StudentSettingsRoute
+  '/faculty/': typeof FacultyIndexRoute
+  '/student/': typeof StudentIndexRoute
+  '/faculty/classrooms/$id': typeof FacultyClassroomsIdRouteWithChildren
+  '/faculty/materials/$id': typeof FacultyMaterialsIdRoute
+  '/student/materials/$id': typeof StudentMaterialsIdRoute
+  '/faculty/classrooms/': typeof FacultyClassroomsIndexRoute
+  '/faculty/materials/': typeof FacultyMaterialsIndexRoute
+  '/student/materials/': typeof StudentMaterialsIndexRoute
+  '/faculty/classrooms/$id/syllabus': typeof FacultyClassroomsIdSyllabusRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
-  '/faculty': typeof AuthenticatedFacultyIndexRoute
-  '/student': typeof AuthenticatedStudentIndexRoute
-  '/faculty/subjects/$subjectId': typeof AuthenticatedFacultySubjectsSubjectIdRoute
-  '/faculty/topics/$topicId': typeof AuthenticatedFacultyTopicsTopicIdRoute
-  '/student/subjects/$subjectId': typeof AuthenticatedStudentSubjectsSubjectIdRoute
-  '/faculty/subjects': typeof AuthenticatedFacultySubjectsIndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/faculty/generate': typeof FacultyGenerateRoute
+  '/faculty/profile': typeof FacultyProfileRoute
+  '/faculty/settings': typeof FacultySettingsRoute
+  '/student/join': typeof StudentJoinRoute
+  '/student/profile': typeof StudentProfileRoute
+  '/student/settings': typeof StudentSettingsRoute
+  '/faculty': typeof FacultyIndexRoute
+  '/student': typeof StudentIndexRoute
+  '/faculty/classrooms/$id': typeof FacultyClassroomsIdRouteWithChildren
+  '/faculty/materials/$id': typeof FacultyMaterialsIdRoute
+  '/student/materials/$id': typeof StudentMaterialsIdRoute
+  '/faculty/classrooms': typeof FacultyClassroomsIndexRoute
+  '/faculty/materials': typeof FacultyMaterialsIndexRoute
+  '/student/materials': typeof StudentMaterialsIndexRoute
+  '/faculty/classrooms/$id/syllabus': typeof FacultyClassroomsIdSyllabusRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/auth': typeof AuthRoute
-  '/_authenticated/faculty': typeof AuthenticatedFacultyRouteWithChildren
-  '/_authenticated/student': typeof AuthenticatedStudentRouteWithChildren
-  '/_authenticated/faculty/': typeof AuthenticatedFacultyIndexRoute
-  '/_authenticated/student/': typeof AuthenticatedStudentIndexRoute
-  '/_authenticated/faculty/subjects/$subjectId': typeof AuthenticatedFacultySubjectsSubjectIdRoute
-  '/_authenticated/faculty/topics/$topicId': typeof AuthenticatedFacultyTopicsTopicIdRoute
-  '/_authenticated/student/subjects/$subjectId': typeof AuthenticatedStudentSubjectsSubjectIdRoute
-  '/_authenticated/faculty/subjects/': typeof AuthenticatedFacultySubjectsIndexRoute
+  '/faculty': typeof FacultyRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/student': typeof StudentRouteWithChildren
+  '/faculty/generate': typeof FacultyGenerateRoute
+  '/faculty/profile': typeof FacultyProfileRoute
+  '/faculty/settings': typeof FacultySettingsRoute
+  '/student/join': typeof StudentJoinRoute
+  '/student/profile': typeof StudentProfileRoute
+  '/student/settings': typeof StudentSettingsRoute
+  '/faculty/': typeof FacultyIndexRoute
+  '/student/': typeof StudentIndexRoute
+  '/faculty/classrooms/$id': typeof FacultyClassroomsIdRouteWithChildren
+  '/faculty/materials/$id': typeof FacultyMaterialsIdRoute
+  '/student/materials/$id': typeof StudentMaterialsIdRoute
+  '/faculty/classrooms/': typeof FacultyClassroomsIndexRoute
+  '/faculty/materials/': typeof FacultyMaterialsIndexRoute
+  '/student/materials/': typeof StudentMaterialsIndexRoute
+  '/faculty/classrooms/$id/syllabus': typeof FacultyClassroomsIdSyllabusRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/auth'
     | '/faculty'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
     | '/student'
+    | '/faculty/generate'
+    | '/faculty/profile'
+    | '/faculty/settings'
+    | '/student/join'
+    | '/student/profile'
+    | '/student/settings'
     | '/faculty/'
     | '/student/'
-    | '/faculty/subjects/$subjectId'
-    | '/faculty/topics/$topicId'
-    | '/student/subjects/$subjectId'
-    | '/faculty/subjects/'
+    | '/faculty/classrooms/$id'
+    | '/faculty/materials/$id'
+    | '/student/materials/$id'
+    | '/faculty/classrooms/'
+    | '/faculty/materials/'
+    | '/student/materials/'
+    | '/faculty/classrooms/$id/syllabus'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/auth'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/faculty/generate'
+    | '/faculty/profile'
+    | '/faculty/settings'
+    | '/student/join'
+    | '/student/profile'
+    | '/student/settings'
     | '/faculty'
     | '/student'
-    | '/faculty/subjects/$subjectId'
-    | '/faculty/topics/$topicId'
-    | '/student/subjects/$subjectId'
-    | '/faculty/subjects'
+    | '/faculty/classrooms/$id'
+    | '/faculty/materials/$id'
+    | '/student/materials/$id'
+    | '/faculty/classrooms'
+    | '/faculty/materials'
+    | '/student/materials'
+    | '/faculty/classrooms/$id/syllabus'
   id:
     | '__root__'
     | '/'
-    | '/_authenticated'
-    | '/auth'
-    | '/_authenticated/faculty'
-    | '/_authenticated/student'
-    | '/_authenticated/faculty/'
-    | '/_authenticated/student/'
-    | '/_authenticated/faculty/subjects/$subjectId'
-    | '/_authenticated/faculty/topics/$topicId'
-    | '/_authenticated/student/subjects/$subjectId'
-    | '/_authenticated/faculty/subjects/'
+    | '/faculty'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/student'
+    | '/faculty/generate'
+    | '/faculty/profile'
+    | '/faculty/settings'
+    | '/student/join'
+    | '/student/profile'
+    | '/student/settings'
+    | '/faculty/'
+    | '/student/'
+    | '/faculty/classrooms/$id'
+    | '/faculty/materials/$id'
+    | '/student/materials/$id'
+    | '/faculty/classrooms/'
+    | '/faculty/materials/'
+    | '/student/materials/'
+    | '/faculty/classrooms/$id/syllabus'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
+  FacultyRoute: typeof FacultyRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
+  StudentRoute: typeof StudentRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -171,130 +294,213 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/faculty': {
-      id: '/_authenticated/faculty'
+    '/faculty': {
+      id: '/faculty'
       path: '/faculty'
       fullPath: '/faculty'
-      preLoaderRoute: typeof AuthenticatedFacultyRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      preLoaderRoute: typeof FacultyRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/student': {
-      id: '/_authenticated/student'
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student': {
+      id: '/student'
       path: '/student'
       fullPath: '/student'
-      preLoaderRoute: typeof AuthenticatedStudentRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      preLoaderRoute: typeof StudentRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/faculty/': {
-      id: '/_authenticated/faculty/'
+    '/faculty/': {
+      id: '/faculty/'
       path: '/'
       fullPath: '/faculty/'
-      preLoaderRoute: typeof AuthenticatedFacultyIndexRouteImport
-      parentRoute: typeof AuthenticatedFacultyRoute
+      preLoaderRoute: typeof FacultyIndexRouteImport
+      parentRoute: typeof FacultyRoute
     }
-    '/_authenticated/student/': {
-      id: '/_authenticated/student/'
+    '/faculty/generate': {
+      id: '/faculty/generate'
+      path: '/generate'
+      fullPath: '/faculty/generate'
+      preLoaderRoute: typeof FacultyGenerateRouteImport
+      parentRoute: typeof FacultyRoute
+    }
+    '/faculty/profile': {
+      id: '/faculty/profile'
+      path: '/profile'
+      fullPath: '/faculty/profile'
+      preLoaderRoute: typeof FacultyProfileRouteImport
+      parentRoute: typeof FacultyRoute
+    }
+    '/faculty/settings': {
+      id: '/faculty/settings'
+      path: '/settings'
+      fullPath: '/faculty/settings'
+      preLoaderRoute: typeof FacultySettingsRouteImport
+      parentRoute: typeof FacultyRoute
+    }
+    '/student/': {
+      id: '/student/'
       path: '/'
       fullPath: '/student/'
-      preLoaderRoute: typeof AuthenticatedStudentIndexRouteImport
-      parentRoute: typeof AuthenticatedStudentRoute
+      preLoaderRoute: typeof StudentIndexRouteImport
+      parentRoute: typeof StudentRoute
     }
-    '/_authenticated/faculty/subjects/': {
-      id: '/_authenticated/faculty/subjects/'
-      path: '/subjects'
-      fullPath: '/faculty/subjects/'
-      preLoaderRoute: typeof AuthenticatedFacultySubjectsIndexRouteImport
-      parentRoute: typeof AuthenticatedFacultyRoute
+    '/student/join': {
+      id: '/student/join'
+      path: '/join'
+      fullPath: '/student/join'
+      preLoaderRoute: typeof StudentJoinRouteImport
+      parentRoute: typeof StudentRoute
     }
-    '/_authenticated/faculty/subjects/$subjectId': {
-      id: '/_authenticated/faculty/subjects/$subjectId'
-      path: '/subjects/$subjectId'
-      fullPath: '/faculty/subjects/$subjectId'
-      preLoaderRoute: typeof AuthenticatedFacultySubjectsSubjectIdRouteImport
-      parentRoute: typeof AuthenticatedFacultyRoute
+    '/student/profile': {
+      id: '/student/profile'
+      path: '/profile'
+      fullPath: '/student/profile'
+      preLoaderRoute: typeof StudentProfileRouteImport
+      parentRoute: typeof StudentRoute
     }
-    '/_authenticated/faculty/topics/$topicId': {
-      id: '/_authenticated/faculty/topics/$topicId'
-      path: '/topics/$topicId'
-      fullPath: '/faculty/topics/$topicId'
-      preLoaderRoute: typeof AuthenticatedFacultyTopicsTopicIdRouteImport
-      parentRoute: typeof AuthenticatedFacultyRoute
+    '/student/settings': {
+      id: '/student/settings'
+      path: '/settings'
+      fullPath: '/student/settings'
+      preLoaderRoute: typeof StudentSettingsRouteImport
+      parentRoute: typeof StudentRoute
     }
-    '/_authenticated/student/subjects/$subjectId': {
-      id: '/_authenticated/student/subjects/$subjectId'
-      path: '/subjects/$subjectId'
-      fullPath: '/student/subjects/$subjectId'
-      preLoaderRoute: typeof AuthenticatedStudentSubjectsSubjectIdRouteImport
-      parentRoute: typeof AuthenticatedStudentRoute
+    '/faculty/classrooms/': {
+      id: '/faculty/classrooms/'
+      path: '/classrooms'
+      fullPath: '/faculty/classrooms/'
+      preLoaderRoute: typeof FacultyClassroomsIndexRouteImport
+      parentRoute: typeof FacultyRoute
+    }
+    '/faculty/classrooms/$id': {
+      id: '/faculty/classrooms/$id'
+      path: '/classrooms/$id'
+      fullPath: '/faculty/classrooms/$id'
+      preLoaderRoute: typeof FacultyClassroomsIdRouteImport
+      parentRoute: typeof FacultyRoute
+    }
+    '/faculty/materials/': {
+      id: '/faculty/materials/'
+      path: '/materials'
+      fullPath: '/faculty/materials/'
+      preLoaderRoute: typeof FacultyMaterialsIndexRouteImport
+      parentRoute: typeof FacultyRoute
+    }
+    '/faculty/materials/$id': {
+      id: '/faculty/materials/$id'
+      path: '/materials/$id'
+      fullPath: '/faculty/materials/$id'
+      preLoaderRoute: typeof FacultyMaterialsIdRouteImport
+      parentRoute: typeof FacultyRoute
+    }
+    '/student/materials/': {
+      id: '/student/materials/'
+      path: '/materials'
+      fullPath: '/student/materials/'
+      preLoaderRoute: typeof StudentMaterialsIndexRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/materials/$id': {
+      id: '/student/materials/$id'
+      path: '/materials/$id'
+      fullPath: '/student/materials/$id'
+      preLoaderRoute: typeof StudentMaterialsIdRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/faculty/classrooms/$id/syllabus': {
+      id: '/faculty/classrooms/$id/syllabus'
+      path: '/syllabus'
+      fullPath: '/faculty/classrooms/$id/syllabus'
+      preLoaderRoute: typeof FacultyClassroomsIdSyllabusRouteImport
+      parentRoute: typeof FacultyClassroomsIdRoute
     }
   }
 }
 
-interface AuthenticatedFacultyRouteChildren {
-  AuthenticatedFacultyIndexRoute: typeof AuthenticatedFacultyIndexRoute
-  AuthenticatedFacultySubjectsSubjectIdRoute: typeof AuthenticatedFacultySubjectsSubjectIdRoute
-  AuthenticatedFacultyTopicsTopicIdRoute: typeof AuthenticatedFacultyTopicsTopicIdRoute
-  AuthenticatedFacultySubjectsIndexRoute: typeof AuthenticatedFacultySubjectsIndexRoute
+interface FacultyClassroomsIdRouteChildren {
+  FacultyClassroomsIdSyllabusRoute: typeof FacultyClassroomsIdSyllabusRoute
 }
 
-const AuthenticatedFacultyRouteChildren: AuthenticatedFacultyRouteChildren = {
-  AuthenticatedFacultyIndexRoute: AuthenticatedFacultyIndexRoute,
-  AuthenticatedFacultySubjectsSubjectIdRoute:
-    AuthenticatedFacultySubjectsSubjectIdRoute,
-  AuthenticatedFacultyTopicsTopicIdRoute:
-    AuthenticatedFacultyTopicsTopicIdRoute,
-  AuthenticatedFacultySubjectsIndexRoute:
-    AuthenticatedFacultySubjectsIndexRoute,
+const FacultyClassroomsIdRouteChildren: FacultyClassroomsIdRouteChildren = {
+  FacultyClassroomsIdSyllabusRoute: FacultyClassroomsIdSyllabusRoute,
 }
 
-const AuthenticatedFacultyRouteWithChildren =
-  AuthenticatedFacultyRoute._addFileChildren(AuthenticatedFacultyRouteChildren)
+const FacultyClassroomsIdRouteWithChildren =
+  FacultyClassroomsIdRoute._addFileChildren(FacultyClassroomsIdRouteChildren)
 
-interface AuthenticatedStudentRouteChildren {
-  AuthenticatedStudentIndexRoute: typeof AuthenticatedStudentIndexRoute
-  AuthenticatedStudentSubjectsSubjectIdRoute: typeof AuthenticatedStudentSubjectsSubjectIdRoute
+interface FacultyRouteChildren {
+  FacultyGenerateRoute: typeof FacultyGenerateRoute
+  FacultyProfileRoute: typeof FacultyProfileRoute
+  FacultySettingsRoute: typeof FacultySettingsRoute
+  FacultyIndexRoute: typeof FacultyIndexRoute
+  FacultyClassroomsIdRoute: typeof FacultyClassroomsIdRouteWithChildren
+  FacultyMaterialsIdRoute: typeof FacultyMaterialsIdRoute
+  FacultyClassroomsIndexRoute: typeof FacultyClassroomsIndexRoute
+  FacultyMaterialsIndexRoute: typeof FacultyMaterialsIndexRoute
 }
 
-const AuthenticatedStudentRouteChildren: AuthenticatedStudentRouteChildren = {
-  AuthenticatedStudentIndexRoute: AuthenticatedStudentIndexRoute,
-  AuthenticatedStudentSubjectsSubjectIdRoute:
-    AuthenticatedStudentSubjectsSubjectIdRoute,
+const FacultyRouteChildren: FacultyRouteChildren = {
+  FacultyGenerateRoute: FacultyGenerateRoute,
+  FacultyProfileRoute: FacultyProfileRoute,
+  FacultySettingsRoute: FacultySettingsRoute,
+  FacultyIndexRoute: FacultyIndexRoute,
+  FacultyClassroomsIdRoute: FacultyClassroomsIdRouteWithChildren,
+  FacultyMaterialsIdRoute: FacultyMaterialsIdRoute,
+  FacultyClassroomsIndexRoute: FacultyClassroomsIndexRoute,
+  FacultyMaterialsIndexRoute: FacultyMaterialsIndexRoute,
 }
 
-const AuthenticatedStudentRouteWithChildren =
-  AuthenticatedStudentRoute._addFileChildren(AuthenticatedStudentRouteChildren)
+const FacultyRouteWithChildren =
+  FacultyRoute._addFileChildren(FacultyRouteChildren)
 
-interface AuthenticatedRouteRouteChildren {
-  AuthenticatedFacultyRoute: typeof AuthenticatedFacultyRouteWithChildren
-  AuthenticatedStudentRoute: typeof AuthenticatedStudentRouteWithChildren
+interface StudentRouteChildren {
+  StudentJoinRoute: typeof StudentJoinRoute
+  StudentProfileRoute: typeof StudentProfileRoute
+  StudentSettingsRoute: typeof StudentSettingsRoute
+  StudentIndexRoute: typeof StudentIndexRoute
+  StudentMaterialsIdRoute: typeof StudentMaterialsIdRoute
+  StudentMaterialsIndexRoute: typeof StudentMaterialsIndexRoute
 }
 
-const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedFacultyRoute: AuthenticatedFacultyRouteWithChildren,
-  AuthenticatedStudentRoute: AuthenticatedStudentRouteWithChildren,
+const StudentRouteChildren: StudentRouteChildren = {
+  StudentJoinRoute: StudentJoinRoute,
+  StudentProfileRoute: StudentProfileRoute,
+  StudentSettingsRoute: StudentSettingsRoute,
+  StudentIndexRoute: StudentIndexRoute,
+  StudentMaterialsIdRoute: StudentMaterialsIdRoute,
+  StudentMaterialsIndexRoute: StudentMaterialsIndexRoute,
 }
 
-const AuthenticatedRouteRouteWithChildren =
-  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+const StudentRouteWithChildren =
+  StudentRoute._addFileChildren(StudentRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
+  FacultyRoute: FacultyRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
+  StudentRoute: StudentRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

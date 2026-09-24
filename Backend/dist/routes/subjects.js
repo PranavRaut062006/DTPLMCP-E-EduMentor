@@ -13,16 +13,17 @@ const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
 router.use(auth_1.authMiddleware);
 const upload = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() });
-router.get('/', (req, res) => {
-    const db = (0, db_1.readDB)();
-    const subjects = db.subjects.filter(s => s.faculty_id === req.user.id);
+router.get('/', async (req, res) => {
+    const db = (0, db_1.getDB)();
+    const subjects = await db.collection('subjects')
+        .find(req.user.role === 'student' ? {} : { faculty_id: req.user.id }).toArray();
     res.json(subjects);
 });
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const { name, code, department, semester } = req.body;
     if (!name || !code)
         return res.status(400).json({ error: 'Name and code are required' });
-    const db = (0, db_1.readDB)();
+    const db = (0, db_1.getDB)();
     const newSubject = {
         id: (0, uuid_1.v4)(),
         faculty_id: req.user.id,
@@ -32,13 +33,12 @@ router.post('/', (req, res) => {
         semester: semester || '',
         created_at: new Date().toISOString()
     };
-    db.subjects.push(newSubject);
-    (0, db_1.writeDB)(db);
+    await db.collection('subjects').insertOne(newSubject);
     res.status(201).json(newSubject);
 });
-router.get('/:id', (req, res) => {
-    const db = (0, db_1.readDB)();
-    const subject = db.subjects.find(s => s.id === req.params.id);
+router.get('/:id', async (req, res) => {
+    const db = (0, db_1.getDB)();
+    const subject = await db.collection('subjects').findOne({ id: req.params.id });
     if (!subject)
         return res.status(404).json({ error: 'Subject not found' });
     if (req.user.role === 'faculty' && subject.faculty_id !== req.user.id) {
@@ -49,8 +49,8 @@ router.get('/:id', (req, res) => {
 router.post('/:id/syllabus', upload.single('syllabus'), async (req, res) => {
     try {
         const subjectId = req.params.id;
-        const db = (0, db_1.readDB)();
-        const subject = db.subjects.find(s => s.id === subjectId);
+        const db = (0, db_1.getDB)();
+        const subject = await db.collection('subjects').findOne({ id: subjectId });
         if (!subject)
             return res.status(404).json({ error: 'Subject not found' });
         if (subject.faculty_id !== req.user.id)
@@ -58,15 +58,17 @@ router.post('/:id/syllabus', upload.single('syllabus'), async (req, res) => {
         if (!req.file)
             return res.status(400).json({ error: 'No file uploaded' });
         // 1. Parse PDF
+        console.log(`[DEBUG] Starting PDF parse for subject ${subject.name}...`);
         const parser = new pdf_parse_1.PDFParse({ data: req.file.buffer });
         const pdfData = await parser.getText();
         const text = pdfData.text;
+        console.log(`[DEBUG] PDF parsed successfully. Text length: ${text.length} characters.`);
         // 2. Use Gemini to extract units and topics
         if (!process.env.GEMINI_API_KEY) {
             return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
         }
         const genAI = new generative_ai_1.GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
         const prompt = `
       You are an expert academic curriculum parser. 
       Read the following syllabus text for a subject named "${subject.name}" (${subject.code}).
@@ -83,7 +85,9 @@ router.post('/:id/syllabus', upload.single('syllabus'), async (req, res) => {
       Syllabus Text:
       ${text.substring(0, 30000)} // Limit text to avoid token limits if too large
     `;
+        console.log(`[DEBUG] Sending request to Gemini (Prompt length: ${prompt.length})...`);
         const result = await model.generateContent(prompt);
+        console.log(`[DEBUG] Received response from Gemini.`);
         const responseText = result.response.text();
         let unitsData;
         try {
@@ -103,7 +107,7 @@ router.post('/:id/syllabus', upload.single('syllabus'), async (req, res) => {
                 title: u.title,
                 created_at: new Date().toISOString()
             };
-            db.units.push(newUnit);
+            await db.collection('units').insertOne(newUnit);
             let topicPosition = 1;
             if (u.topics && Array.isArray(u.topics)) {
                 for (const t of u.topics) {
@@ -116,12 +120,11 @@ router.post('/:id/syllabus', upload.single('syllabus'), async (req, res) => {
                         status: 'NOT_GENERATED',
                         created_at: new Date().toISOString()
                     };
-                    db.topics.push(newTopic);
+                    await db.collection('topics').insertOne(newTopic);
                 }
             }
             positionCounter++;
         }
-        (0, db_1.writeDB)(db);
         res.json({ message: 'Syllabus parsed and structure created successfully', units: unitsData.length });
     }
     catch (error) {
