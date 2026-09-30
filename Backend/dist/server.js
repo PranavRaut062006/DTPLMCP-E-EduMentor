@@ -15,6 +15,8 @@ const topics_1 = __importDefault(require("./routes/topics"));
 const content_1 = __importDefault(require("./routes/content"));
 const generate_1 = __importDefault(require("./routes/generate"));
 const classrooms_1 = __importDefault(require("./routes/classrooms"));
+const stats_1 = __importDefault(require("./routes/stats"));
+const materials_1 = __importDefault(require("./routes/materials"));
 // Always load Backend/.env, even when the server is started from another folder.
 dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../.env') });
 const app = (0, express_1.default)();
@@ -29,6 +31,8 @@ app.use('/api/topics', topics_1.default);
 app.use('/api/content', content_1.default);
 app.use('/api/generate', generate_1.default);
 app.use('/api/generation', generate_1.default); // alias used by the frontend
+app.use('/api/stats', stats_1.default);
+app.use('/api/materials', materials_1.default);
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok' });
 });

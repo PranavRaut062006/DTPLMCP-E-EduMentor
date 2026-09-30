@@ -49,29 +49,184 @@ router.post('/', async (req: any, res) => {
       const wantNotes = outputs.includes('notes');
       const wantPlan = outputs.includes('teaching-plan');
 
-      const planField = wantPlan ? `"teaching_plan": "A detailed, well-structured teaching plan in Markdown format covering objectives, outline, activities, and assessment. Minimum 300 words.",` : '';
-      const notesField = wantNotes ? `"notes": "Comprehensive student notes in Markdown format with headings, subheadings, definitions, examples, and key points. Minimum 500 words.",` : '';
+      // Calculate target slide count dynamically based on requested teaching duration
+      const subtopicsCount = topic.subtopics ? topic.subtopics.length : 0;
+      let targetSlides: number;
+      let minSlides: number;
+      let maxSlides: number;
+
+      if (durationMinutes <= 20) {
+        targetSlides = Math.max(7, Math.min(10, 6 + subtopicsCount));
+        minSlides = 6;
+        maxSlides = 10;
+      } else if (durationMinutes <= 35) {
+        targetSlides = Math.max(10, Math.min(14, 8 + subtopicsCount));
+        minSlides = 9;
+        maxSlides = 14;
+      } else if (durationMinutes <= 60) {
+        targetSlides = Math.max(14, Math.min(19, 12 + subtopicsCount * 2));
+        minSlides = 13;
+        maxSlides = 19;
+      } else if (durationMinutes <= 120) {
+        targetSlides = Math.max(20, Math.min(28, 16 + subtopicsCount * 2));
+        minSlides = 18;
+        maxSlides = 28;
+      } else {
+        targetSlides = Math.max(26, Math.min(36, 20 + subtopicsCount * 3));
+        minSlides = 24;
+        maxSlides = 38;
+      }
+
+      const planField = wantPlan ? `"teaching_plan": "A detailed, well-structured academic teaching plan in Markdown format covering learning objectives, timeline breakdown, pedagogy, classroom activities, assessment criteria, and discussion questions. Minimum 400 words.",` : '';
+      const notesField = wantNotes ? `"notes": "Comprehensive university-level student study notes in Markdown format with clear headings, subheadings, rigorous definitions, real-world examples, mathematical or conceptual formulations, and key review takeaways. Minimum 600 words.",` : '';
       const slidesField = wantPPT
-        ? `"slides": [{ "title": "Slide Title", "bullets": ["Point 1", "Point 2"], "script": "Faculty narration script", "layout": "standard", "visualPrompt": "" }]`
+        ? `"slides": [
+    {
+      "title": "Learning Objectives & Course Context",
+      "layout": "standard",
+      "bullets": ["**Core Objective:** Comprehend the foundational mechanisms of this topic", "**Industrial Relevance:** Analyze how modern enterprises leverage these principles", "**Key Outcomes:** Evaluate architecture trade-offs and implementation strategies"],
+      "script": "Welcome students. Today we explore this subject with a focus on both theoretical foundations and production applications."
+    },
+    {
+      "title": "Formal Concepts & Core Terminology",
+      "layout": "standard",
+      "bullets": ["**Primary Concept:** Formal definition and underlying scientific/technical principles", "**Operational Scope:** How this functions within the broader system hierarchy", "**Key Distinction:** How this fundamentally differs from legacy or adjacent paradigms"],
+      "script": "Let us establish precise definitions before examining deeper architecture."
+    },
+    {
+      "title": "End-to-End Execution Flowchart",
+      "layout": "process_flow",
+      "bullets": [],
+      "diagram": {
+        "type": "flowchart",
+        "nodes": [
+          { "step": "01", "label": "Initialization", "description": "Requirement ingestion & state discovery" },
+          { "step": "02", "label": "Processing", "description": "Core transformation & business logic" },
+          { "step": "03", "label": "Validation", "description": "Verification, testing & boundary checks" },
+          { "step": "04", "label": "Deployment", "description": "Production release & telemetry tracking" }
+        ]
+      },
+      "script": "Notice how each phase transitions sequentially with clear validation checkpoints."
+    },
+    {
+      "title": "Architectural Paradigms: Comparative Analysis",
+      "layout": "comparison",
+      "bullets": [],
+      "diagram": {
+        "type": "comparison",
+        "leftTitle": "Traditional / Baseline Paradigm",
+        "leftItems": ["**Architecture:** Monolithic or tightly-coupled components", "**Risk & Cost:** Lower upfront complexity, higher long-term maintenance", "**Bottleneck:** Limited horizontal elasticity under peak load"],
+        "rightTitle": "Modern / Advanced Paradigm",
+        "rightItems": ["**Architecture:** Distributed, modular, decoupled services", "**Risk & Cost:** Higher design investment, superior scalability", "**Benefit:** High fault tolerance and rapid iteration cycles"]
+      },
+      "script": "Understanding the trade-offs between these two approaches is essential for practical engineering decisions."
+    },
+    {
+      "title": "Key Strategic Pillars & Component Grid",
+      "layout": "cards_grid",
+      "bullets": [],
+      "diagram": {
+        "type": "grid",
+        "cards": [
+          { "title": "Pillar 1: Reliability", "items": ["Fault isolation barriers", "Automated self-healing", "Zero-downtime rollover"] },
+          { "title": "Pillar 2: Performance", "items": ["Low-latency pipelines", "Predictive caching", "Optimized throughput"] },
+          { "title": "Pillar 3: Security", "items": ["End-to-end encryption", "Zero-trust verification", "Granular access control"] },
+          { "title": "Pillar 4: Governance", "items": ["Auditable event logs", "Compliance monitoring", "Automated reporting"] }
+        ]
+      },
+      "script": "These four pillars together form the operational foundation of our system architecture."
+    },
+    {
+      "title": "Real-World Case Study: Production Application",
+      "layout": "case_study",
+      "bullets": [],
+      "diagram": {
+        "type": "case_study",
+        "challengeTitle": "Industry Problem & Context",
+        "challengeDesc": "A global enterprise experienced severe latency bottlenecks and data synchronization errors during high-volume transactions.",
+        "solutionTitle": "Implemented Architecture & Strategy",
+        "solutionDesc": "Re-engineered the core pipeline using event-driven asynchronous processing combined with localized in-memory caches.",
+        "outcomes": ["45% reduction in median transaction response time", "99.99% system availability during peak traffic events", "Eliminated data corruption across distributed nodes"]
+      },
+      "script": "Let us examine this real-world case study to see how theoretical principles solve concrete operational challenges."
+    },
+    {
+      "title": "Classroom Discussion & Critical Thinking",
+      "layout": "discussion",
+      "bullets": [],
+      "diagram": {
+        "type": "discussion",
+        "question": "Under what specific constraints would an organization deliberately choose the simpler traditional approach over the advanced distributed model?",
+        "discussionPoints": [
+          "**Capital & Team Capacity:** Team size, specialized skills, and upfront development budgets.",
+          "**Throughput Thresholds:** When transaction volumes do not justify distributed operational overhead.",
+          "**Regulatory Constraints:** Strict data residency or compliance requiring single-tenant physical isolation."
+        ]
+      },
+      "script": "Take a moment to discuss this with your peers. Consider the engineering trade-offs beyond pure performance metrics."
+    },
+    {
+      "title": "Summary & Key Takeaways",
+      "layout": "summary",
+      "bullets": [],
+      "diagram": {
+        "type": "summary",
+        "takeaways": [
+          { "title": "Foundation Matters", "desc": "Solid grasp of core principles is required before designing complex systems." },
+          { "title": "Architect for Resilience", "desc": "Anticipate component failures and build automated isolation mechanisms." },
+          { "title": "Measure What Counts", "desc": "Evaluate solutions through empirical metrics, cost efficiency, and maintainability." },
+          { "title": "Continuous Iteration", "desc": "Refine architecture iteratively based on real-world telemetry and user feedback." }
+        ]
+      },
+      "script": "To summarize our session today, remember these core takeaways as you apply these concepts in your coursework and projects."
+    }
+  ]`
         : '"slides": []';
 
-      const prompt = `You are an expert academic content creator. Create detailed teaching material for the topic: "${topic.title}".
-Subtopics: ${topic.subtopics.length > 0 ? topic.subtopics.join(', ') : 'General overview'}.
-Session duration: ${durationMinutes} minutes.
-References: ${referencesText}.
+      const prompt = `You are a distinguished university professor and master curriculum designer.
+Create comprehensive, rigorous, and classroom-ready teaching material for the topic: "${topic.title}".
 
-Return ONLY a valid JSON object (no markdown fences, no explanation) with this EXACT structure:
+COURSE CONTEXT & METRICS:
+- Topic Title: "${topic.title}"
+- Subtopics to thoroughly cover: ${topic.subtopics.length > 0 ? topic.subtopics.join(', ') : 'Comprehensive academic overview'}.
+- Allocated Lecture Duration: ${durationMinutes} minutes (The presentation depth and number of slides MUST reflect this ${durationMinutes}-minute teaching duration).
+- Reference Materials / Context: ${referencesText}.
+
+TARGET SLIDE COUNT:
+- Generate approximately ${targetSlides} slides (between ${minSlides} and ${maxSlides} slides) to properly pace a ${durationMinutes}-minute university lecture.
+
+REQUIRED SLIDE ARCHITECTURE & PEDAGOGICAL FLOW:
+1. Introduction & Learning Objectives (Why this topic matters, industrial relevance)
+2. Foundational Concepts & Terminology (Clear formal definitions with bold lead-ins e.g. "**Concept Name:** Explanation")
+3. Core Architectural Mechanisms / Principles (3-5 slides covering subtopics with substantial depth)
+4. Step-by-Step Flowchart / Lifecycle / Process Pipeline (Structured sequential nodes)
+5. Comparative Analysis / Contrasting Paradigms (e.g. Approach A vs Approach B, Trade-offs)
+6. Strategic Pillars / Architecture Breakdown (Multi-feature cards grid)
+7. Real-World Case Study / Concrete Engineering Example (Context, Problem, Solution, Outcome)
+8. Interactive Classroom Discussion Prompt / Critical Thinking Question (Question for students + key discussion angles)
+9. Summary & Actionable Key Takeaways
+
+SLIDE FORMAT & LAYOUT TYPES TO USE (Mix these creatively across the presentation):
+1. "standard": 3 to 5 substantive bullet points with bold keywords and clear explanations (use this for 40-50% of slides).
+2. "process_flow": Sequential flowchart with 3 to 5 nodes [{ "step": "01", "label": "Stage Name", "description": "Specific action & output" }].
+3. "comparison": Two contrasting cards with leftTitle/leftItems and rightTitle/rightItems.
+4. "cards_grid": 3 or 4 strategic category cards with title and items.
+5. "case_study": Concrete industry scenario with challenge, solution, and outcomes.
+6. "discussion": Class engagement slide with question and discussionPoints.
+7. "summary": Core takeaway conclusions with title and desc.
+
+CRITICAL ANTI-DUPLICATION & QUALITY RULES:
+- ZERO DUPLICATION: Do NOT repeat identical bullet points, definitions, or statements across different slides. Each slide must provide new, distinct educational value.
+- SUBSTANTIVE CONTENT: Avoid extremely short 1-2 line slides. Ensure each slide has sufficient depth for faculty to teach effectively.
+- NO PROMPT DESCRIPTIONS: Do NOT write text prompts like "draw an image". Use the structured JSON fields for diagrams and cards.
+- PRESENTER SCRIPT: Provide a natural, insightful 2-4 sentence narration script for faculty in the "script" field for every slide.
+
+Return ONLY a valid JSON object with this EXACT structure (no markdown fences, no text before or after):
 {
   ${planField}
   ${notesField}
   ${slidesField}
-}
-
-RULES:
-- For slides, generate 8-12 slides. Mix layouts: "standard" for text bullets, "image_right" for concepts needing illustration, "process_flow" for step-by-step sequences.
-- "visualPrompt" should describe what image to show — only required for "image_right" layout, leave empty string for others.
-- All markdown content should use proper headings (##, ###), bullet lists, bold for key terms.
-- Do NOT include any text outside the JSON object.`;
+}`;
 
       const result = await model.generateContent(prompt);
       const rawText = result.response.text().replace(/```json|```/g, '').trim();

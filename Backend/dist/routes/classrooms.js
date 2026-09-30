@@ -22,6 +22,7 @@ async function subjectToClassroom(s, db) {
     const topicIds = topics.map(t => t.id);
     const faculty = await db.collection('users').findOne({ id: s.faculty_id });
     const materialCount = await db.collection('content').countDocuments({ topic_id: { $in: topicIds } });
+    const studentCount = await db.collection('enrollments').countDocuments({ classroom_id: s.id });
     return {
         id: s.id,
         name: s.name,
@@ -30,7 +31,7 @@ async function subjectToClassroom(s, db) {
         academicYear: s.semester || '',
         department: s.department || '',
         classCode: s.code,
-        studentCount: 0,
+        studentCount,
         materialCount,
         facultyName: faculty?.name || '',
         updatedAt: s.created_at,
@@ -344,17 +345,50 @@ router.post('/:id/syllabus/upload', upload.single('syllabus'), async (req, res) 
         res.status(500).json({ error: error.message });
     }
 });
-/** GET /api/classrooms/:id/students — stub */
-router.get('/:id/students', (req, res) => {
-    res.json([]);
+/** GET /api/classrooms/:id/students — get enrolled students */
+router.get('/:id/students', async (req, res) => {
+    try {
+        const db = (0, db_1.getDB)();
+        const enrollments = await db.collection('enrollments').find({ classroom_id: req.params.id }).toArray();
+        const studentIds = enrollments.map((e) => e.user_id);
+        const students = await db.collection('users').find({ id: { $in: studentIds } }).toArray();
+        res.json(students.map((s) => ({
+            id: s.id,
+            fullName: s.name,
+            email: s.email,
+            role: s.role,
+        })));
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
-/** POST /api/classrooms/join — stub for students joining by class code */
+/** POST /api/classrooms/join — students joining by class code */
 router.post('/join', async (req, res) => {
-    const { classCode } = req.body;
-    const db = (0, db_1.getDB)();
-    const subject = await db.collection('subjects').findOne({ code: classCode });
-    if (!subject)
-        return res.status(404).json({ error: 'Class not found with that code' });
-    res.json(await subjectToClassroom(subject, db));
+    try {
+        const { classCode } = req.body;
+        const db = (0, db_1.getDB)();
+        const subject = await db.collection('subjects').findOne({ code: classCode });
+        if (!subject)
+            return res.status(404).json({ error: 'Class not found with that code' });
+        if (req.user?.id) {
+            const existing = await db.collection('enrollments').findOne({
+                user_id: req.user.id,
+                classroom_id: subject.id,
+            });
+            if (!existing) {
+                await db.collection('enrollments').insertOne({
+                    id: (0, uuid_1.v4)(),
+                    user_id: req.user.id,
+                    classroom_id: subject.id,
+                    created_at: new Date().toISOString(),
+                });
+            }
+        }
+        res.json(await subjectToClassroom(subject, db));
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 exports.default = router;

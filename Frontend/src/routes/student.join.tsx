@@ -35,8 +35,8 @@ function StudentJoin() {
     setBusy(true);
     setMessage(null);
     try {
-      await classroomService.join(code.trim().toUpperCase());
-      navigate({ to: "/student" });
+      const classroom = await classroomService.join(code.trim().toUpperCase());
+      navigate({ to: `/student/classroom/${(classroom as any).id}` });
     } catch (error) {
       setMessage(
         error instanceof NotConnectedError

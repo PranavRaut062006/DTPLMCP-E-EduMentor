@@ -11,6 +11,8 @@ import topicRoutes from './routes/topics';
 import contentRoutes from './routes/content';
 import generateRoutes from './routes/generate';
 import classroomRoutes from './routes/classrooms';
+import statsRoutes from './routes/stats';
+import materialsRoutes from './routes/materials';
 
 // Always load Backend/.env, even when the server is started from another folder.
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
@@ -29,6 +31,8 @@ app.use('/api/topics', topicRoutes);
 app.use('/api/content', contentRoutes);
 app.use('/api/generate', generateRoutes);
 app.use('/api/generation', generateRoutes); // alias used by the frontend
+app.use('/api/stats', statsRoutes);
+app.use('/api/materials', materialsRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });

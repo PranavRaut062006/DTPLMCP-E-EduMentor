@@ -26,6 +26,7 @@
     "mongodb": "^7.6.0",
     "multer": "^2.2.0",
     "pdf-parse": "^2.4.5",
+    "pptxgenjs": "^4.0.1",
     "uuid": "^14.0.2"
   },
   "devDependencies": {

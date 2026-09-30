@@ -36,7 +36,7 @@ function FacultyDashboard() {
         description="Your classrooms, content pipeline and publishing activity at a glance."
         actions={
           <Button asChild>
-            <Link to="/faculty/generate">
+                      <Link to="/faculty/generate" search={{ classroomId: "" }}>
               <Sparkles className="mr-2 h-4 w-4" /> Generate content
             </Link>
           </Button>

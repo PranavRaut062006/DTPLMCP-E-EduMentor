@@ -26,6 +26,21 @@ export function setAuthToken(token: string | null) {
   authToken = token;
 }
 
+export function getAuthToken(): string | null {
+  if (authToken) return authToken;
+  try {
+    if (typeof window !== "undefined") {
+      const raw = window.localStorage.getItem("teachai.session");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        return parsed.token || null;
+      }
+      return window.localStorage.getItem("token");
+    }
+  } catch {}
+  return null;
+}
+
 export async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   if (!API_BASE_URL) {
     // No backend configured: callers decide between empty state and error state.

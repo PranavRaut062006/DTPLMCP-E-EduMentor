@@ -25,8 +25,10 @@ import { Route as StudentProfileRouteImport } from './routes/student.profile'
 import { Route as StudentSettingsRouteImport } from './routes/student.settings'
 import { Route as FacultyClassroomsIndexRouteImport } from './routes/faculty.classrooms.index'
 import { Route as FacultyClassroomsIdRouteImport } from './routes/faculty.classrooms.$id'
+import { Route as FacultyContentTopicIdRouteImport } from './routes/faculty.content.$topicId'
 import { Route as FacultyMaterialsIndexRouteImport } from './routes/faculty.materials.index'
 import { Route as FacultyMaterialsIdRouteImport } from './routes/faculty.materials.$id'
+import { Route as StudentClassroomClassroomIdRouteImport } from './routes/student.classroom.$classroomId'
 import { Route as StudentMaterialsIndexRouteImport } from './routes/student.materials.index'
 import { Route as StudentMaterialsIdRouteImport } from './routes/student.materials.$id'
 import { Route as FacultyClassroomsIdSyllabusRouteImport } from './routes/faculty.classrooms.$id.syllabus'
@@ -111,6 +113,11 @@ const FacultyClassroomsIdRoute = FacultyClassroomsIdRouteImport.update({
   path: '/classrooms/$id',
   getParentRoute: () => FacultyRoute,
 } as any)
+const FacultyContentTopicIdRoute = FacultyContentTopicIdRouteImport.update({
+  id: '/content/$topicId',
+  path: '/content/$topicId',
+  getParentRoute: () => FacultyRoute,
+} as any)
 const FacultyMaterialsIndexRoute = FacultyMaterialsIndexRouteImport.update({
   id: '/materials/',
   path: '/materials/',
@@ -121,6 +128,12 @@ const FacultyMaterialsIdRoute = FacultyMaterialsIdRouteImport.update({
   path: '/materials/$id',
   getParentRoute: () => FacultyRoute,
 } as any)
+const StudentClassroomClassroomIdRoute =
+  StudentClassroomClassroomIdRouteImport.update({
+    id: '/classroom/$classroomId',
+    path: '/classroom/$classroomId',
+    getParentRoute: () => StudentRoute,
+  } as any)
 const StudentMaterialsIndexRoute = StudentMaterialsIndexRouteImport.update({
   id: '/materials/',
   path: '/materials/',
@@ -154,7 +167,9 @@ export interface FileRoutesByFullPath {
   '/faculty/': typeof FacultyIndexRoute
   '/student/': typeof StudentIndexRoute
   '/faculty/classrooms/$id': typeof FacultyClassroomsIdRouteWithChildren
+  '/faculty/content/$topicId': typeof FacultyContentTopicIdRoute
   '/faculty/materials/$id': typeof FacultyMaterialsIdRoute
+  '/student/classroom/$classroomId': typeof StudentClassroomClassroomIdRoute
   '/student/materials/$id': typeof StudentMaterialsIdRoute
   '/faculty/classrooms/': typeof FacultyClassroomsIndexRoute
   '/faculty/materials/': typeof FacultyMaterialsIndexRoute
@@ -175,7 +190,9 @@ export interface FileRoutesByTo {
   '/faculty': typeof FacultyIndexRoute
   '/student': typeof StudentIndexRoute
   '/faculty/classrooms/$id': typeof FacultyClassroomsIdRouteWithChildren
+  '/faculty/content/$topicId': typeof FacultyContentTopicIdRoute
   '/faculty/materials/$id': typeof FacultyMaterialsIdRoute
+  '/student/classroom/$classroomId': typeof StudentClassroomClassroomIdRoute
   '/student/materials/$id': typeof StudentMaterialsIdRoute
   '/faculty/classrooms': typeof FacultyClassroomsIndexRoute
   '/faculty/materials': typeof FacultyMaterialsIndexRoute
@@ -199,7 +216,9 @@ export interface FileRoutesById {
   '/faculty/': typeof FacultyIndexRoute
   '/student/': typeof StudentIndexRoute
   '/faculty/classrooms/$id': typeof FacultyClassroomsIdRouteWithChildren
+  '/faculty/content/$topicId': typeof FacultyContentTopicIdRoute
   '/faculty/materials/$id': typeof FacultyMaterialsIdRoute
+  '/student/classroom/$classroomId': typeof StudentClassroomClassroomIdRoute
   '/student/materials/$id': typeof StudentMaterialsIdRoute
   '/faculty/classrooms/': typeof FacultyClassroomsIndexRoute
   '/faculty/materials/': typeof FacultyMaterialsIndexRoute
@@ -224,7 +243,9 @@ export interface FileRouteTypes {
     | '/faculty/'
     | '/student/'
     | '/faculty/classrooms/$id'
+    | '/faculty/content/$topicId'
     | '/faculty/materials/$id'
+    | '/student/classroom/$classroomId'
     | '/student/materials/$id'
     | '/faculty/classrooms/'
     | '/faculty/materials/'
@@ -245,7 +266,9 @@ export interface FileRouteTypes {
     | '/faculty'
     | '/student'
     | '/faculty/classrooms/$id'
+    | '/faculty/content/$topicId'
     | '/faculty/materials/$id'
+    | '/student/classroom/$classroomId'
     | '/student/materials/$id'
     | '/faculty/classrooms'
     | '/faculty/materials'
@@ -268,7 +291,9 @@ export interface FileRouteTypes {
     | '/faculty/'
     | '/student/'
     | '/faculty/classrooms/$id'
+    | '/faculty/content/$topicId'
     | '/faculty/materials/$id'
+    | '/student/classroom/$classroomId'
     | '/student/materials/$id'
     | '/faculty/classrooms/'
     | '/faculty/materials/'
@@ -399,6 +424,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FacultyClassroomsIdRouteImport
       parentRoute: typeof FacultyRoute
     }
+    '/faculty/content/$topicId': {
+      id: '/faculty/content/$topicId'
+      path: '/content/$topicId'
+      fullPath: '/faculty/content/$topicId'
+      preLoaderRoute: typeof FacultyContentTopicIdRouteImport
+      parentRoute: typeof FacultyRoute
+    }
     '/faculty/materials/': {
       id: '/faculty/materials/'
       path: '/materials'
@@ -412,6 +444,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/faculty/materials/$id'
       preLoaderRoute: typeof FacultyMaterialsIdRouteImport
       parentRoute: typeof FacultyRoute
+    }
+    '/student/classroom/$classroomId': {
+      id: '/student/classroom/$classroomId'
+      path: '/classroom/$classroomId'
+      fullPath: '/student/classroom/$classroomId'
+      preLoaderRoute: typeof StudentClassroomClassroomIdRouteImport
+      parentRoute: typeof StudentRoute
     }
     '/student/materials/': {
       id: '/student/materials/'
@@ -454,6 +493,7 @@ interface FacultyRouteChildren {
   FacultySettingsRoute: typeof FacultySettingsRoute
   FacultyIndexRoute: typeof FacultyIndexRoute
   FacultyClassroomsIdRoute: typeof FacultyClassroomsIdRouteWithChildren
+  FacultyContentTopicIdRoute: typeof FacultyContentTopicIdRoute
   FacultyMaterialsIdRoute: typeof FacultyMaterialsIdRoute
   FacultyClassroomsIndexRoute: typeof FacultyClassroomsIndexRoute
   FacultyMaterialsIndexRoute: typeof FacultyMaterialsIndexRoute
@@ -465,6 +505,7 @@ const FacultyRouteChildren: FacultyRouteChildren = {
   FacultySettingsRoute: FacultySettingsRoute,
   FacultyIndexRoute: FacultyIndexRoute,
   FacultyClassroomsIdRoute: FacultyClassroomsIdRouteWithChildren,
+  FacultyContentTopicIdRoute: FacultyContentTopicIdRoute,
   FacultyMaterialsIdRoute: FacultyMaterialsIdRoute,
   FacultyClassroomsIndexRoute: FacultyClassroomsIndexRoute,
   FacultyMaterialsIndexRoute: FacultyMaterialsIndexRoute,
@@ -478,6 +519,7 @@ interface StudentRouteChildren {
   StudentProfileRoute: typeof StudentProfileRoute
   StudentSettingsRoute: typeof StudentSettingsRoute
   StudentIndexRoute: typeof StudentIndexRoute
+  StudentClassroomClassroomIdRoute: typeof StudentClassroomClassroomIdRoute
   StudentMaterialsIdRoute: typeof StudentMaterialsIdRoute
   StudentMaterialsIndexRoute: typeof StudentMaterialsIndexRoute
 }
@@ -487,6 +529,7 @@ const StudentRouteChildren: StudentRouteChildren = {
   StudentProfileRoute: StudentProfileRoute,
   StudentSettingsRoute: StudentSettingsRoute,
   StudentIndexRoute: StudentIndexRoute,
+  StudentClassroomClassroomIdRoute: StudentClassroomClassroomIdRoute,
   StudentMaterialsIdRoute: StudentMaterialsIdRoute,
   StudentMaterialsIndexRoute: StudentMaterialsIndexRoute,
 }

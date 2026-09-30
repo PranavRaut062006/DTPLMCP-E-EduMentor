@@ -39,7 +39,7 @@ import type { ContentKind, ReferenceItem, ReferenceKind } from "@/services/types
 
 export const Route = createFileRoute("/faculty/generate")({
   validateSearch: (search: Record<string, unknown>) => ({
-    classroomId: (search.classroomId as string) ?? "",
+    classroomId: (search['classroomId'] as string) ?? "",
   }),
   head: () => ({
     meta: [
@@ -150,78 +150,15 @@ function GeneratePage() {
     }
   }
 
-  // Show results screen after successful generation
+  // Navigate to content viewer after successful generation
   if (results && results.length > 0) {
-    return (
-      <>
-        <PageHeader
-          title="Content Generated!"
-          description={`Successfully generated content for ${results.length} topic${results.length > 1 ? 's' : ''}.`}
-          crumbs={[
-            { label: "Faculty", to: "/faculty" },
-            { label: "Classrooms", to: "/faculty/classrooms" },
-            ...(classroomId ? [{ label: "Classroom", to: `/faculty/classrooms/${classroomId}` }] : []),
-            { label: "Generated Content" },
-          ]}
-        />
-        <div className="space-y-4">
-          {results.map((material) => (
-            <div key={material.topicId} className="panel p-6">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                    <CheckCircle2 className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">{material.topicTitle}</h3>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      {[material.teaching_plan && 'Teaching Plan', material.notes && 'Notes', material.slides?.length > 0 && `${material.slides.length} Slides`]
-                        .filter(Boolean).join(' · ')}
-                    </p>
-                  </div>
-                </div>
-                <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-xs font-medium text-amber-400">
-                  Draft
-                </span>
-              </div>
-
-              {material.notes && (
-                <div className="mt-4 rounded-xl border border-border bg-elevated/60 p-4 max-h-48 overflow-y-auto">
-                  <p className="text-xs font-semibold text-muted-foreground mb-2">NOTES PREVIEW</p>
-                  <div className="text-sm text-foreground whitespace-pre-wrap font-mono">{material.notes.substring(0, 600)}{material.notes.length > 600 ? '...' : ''}</div>
-                </div>
-              )}
-
-              {material.slides && material.slides.length > 0 && (
-                <div className="mt-3 rounded-xl border border-border bg-elevated/60 p-4">
-                  <p className="text-xs font-semibold text-muted-foreground mb-2">PPT PREVIEW ({material.slides.length} SLIDES)</p>
-                  <div className="space-y-1">
-                    {material.slides.slice(0, 4).map((slide: any, i: number) => (
-                      <div key={i} className="flex items-center gap-2 text-sm">
-                        <Presentation className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                        <span className="truncate text-foreground">{slide.title}</span>
-                      </div>
-                    ))}
-                    {material.slides.length > 4 && (
-                      <p className="text-xs text-muted-foreground pl-5">+{material.slides.length - 4} more slides</p>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-
-          <div className="flex items-center gap-3 pt-2">
-            <Button onClick={() => navigate({ to: `/faculty/classrooms/${classroomId}` })}>
-              View in Classroom
-            </Button>
-            <Button variant="outline" onClick={() => { setResults(null); setStep(0); setTopicIds([]); setOutputs(['teaching-plan']); }}>
-              Generate More
-            </Button>
-          </div>
-        </div>
-      </>
-    );
+    // Navigate to the first generated topic's content viewer
+    const first = results[0];
+    navigate({
+      to: `/faculty/content/${first.topicId}`,
+      search: classroomId ? `?classroomId=${classroomId}` : "",
+    } as any);
+    return null;
   }
 
   return (

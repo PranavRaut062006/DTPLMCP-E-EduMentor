@@ -47,7 +47,7 @@ function FacultyMaterials() {
         crumbs={[{ label: "Faculty", to: "/faculty" }, { label: "Materials" }]}
         actions={
           <Button asChild>
-            <Link to="/faculty/generate">
+                        <Link to="/faculty/generate" search={{ classroomId: "" }}>
               <Sparkles className="mr-2 h-4 w-4" /> Generate content
             </Link>
           </Button>
@@ -93,7 +93,7 @@ function FacultyMaterials() {
           secondary={
             query ? null : (
               <Button asChild>
-                <Link to="/faculty/generate">Generate content</Link>
+                              <Link to="/faculty/generate" search={{ classroomId: "" }}>Generate content</Link>
               </Button>
             )
           }
