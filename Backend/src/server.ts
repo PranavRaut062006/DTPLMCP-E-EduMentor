@@ -23,6 +23,9 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+import voiceRoutes from './routes/voice';
+import videoRoutes from './routes/videos';
+
 app.use('/api/auth', authRoutes);
 app.use('/api/classrooms', classroomRoutes);
 app.use('/api/subjects', subjectRoutes);
@@ -33,6 +36,11 @@ app.use('/api/generate', generateRoutes);
 app.use('/api/generation', generateRoutes); // alias used by the frontend
 app.use('/api/stats', statsRoutes);
 app.use('/api/materials', materialsRoutes);
+app.use('/api/voice', voiceRoutes);
+app.use('/api/videos', videoRoutes);
+
+// Serve static videos
+app.use('/videos', express.static(path.join(__dirname, '../../public/videos')));
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });

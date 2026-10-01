@@ -112,10 +112,17 @@ export const materialService = {
 };
 
 export const voiceService = {
-  profile: () => readMaybe<{ status: "none" | "processing" | "ready" }>(endpoints.voice.profile),
-  uploadSample: (fileName: string) =>
-    request<void>(endpoints.voice.sample, { method: "POST", body: { fileName } }),
-  remove: () => request<void>(endpoints.voice.profile, { method: "DELETE" }),
+  status: () => readMaybe<{ has_voice: boolean; voice_id: string | null }>(endpoints.voice.status),
+  uploadSample: (file: File) => {
+    const form = new FormData();
+    form.append("voiceSample", file);
+    return requestMultipart<{ success: boolean; voice_id: string }>(endpoints.voice.upload, form);
+  },
+};
+
+export const videoService = {
+  generate: (topicId: string) => request<{ success: boolean; message: string }>(endpoints.videos.generate(topicId), { method: "POST" }),
+  status: (topicId: string) => readMaybe<{ status: string; video_url: string | null }>(endpoints.videos.status(topicId)),
 };
 
 export const statsService = {

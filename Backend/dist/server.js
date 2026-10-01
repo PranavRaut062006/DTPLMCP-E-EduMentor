@@ -23,6 +23,8 @@ const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3001;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
+const voice_1 = __importDefault(require("./routes/voice"));
+const videos_1 = __importDefault(require("./routes/videos"));
 app.use('/api/auth', auth_1.default);
 app.use('/api/classrooms', classrooms_1.default);
 app.use('/api/subjects', subjects_1.default);
@@ -33,6 +35,10 @@ app.use('/api/generate', generate_1.default);
 app.use('/api/generation', generate_1.default); // alias used by the frontend
 app.use('/api/stats', stats_1.default);
 app.use('/api/materials', materials_1.default);
+app.use('/api/voice', voice_1.default);
+app.use('/api/videos', videos_1.default);
+// Serve static videos
+app.use('/videos', express_1.default.static(path_1.default.join(__dirname, '../../public/videos')));
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok' });
 });

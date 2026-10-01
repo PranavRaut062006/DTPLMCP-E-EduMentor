@@ -46,6 +46,7 @@ export interface User {
   email: string;
   password?: string;
   role: 'faculty' | 'student';
+  voice_id?: string;
 }
 
 export interface Subject {
@@ -83,6 +84,8 @@ export interface Content {
   lecture_content: any; // e.g. lecture scripts, markdown
   ppt_content: any;     // structured ppt data
   status: 'DRAFT' | 'PUBLISHED';
+  video_status?: 'NOT_STARTED' | 'QUEUED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
+  video_url?: string;
   created_by: string;
   created_at: string;
   updated_at: string;

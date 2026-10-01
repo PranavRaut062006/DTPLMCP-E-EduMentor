@@ -292,11 +292,25 @@ function TopicContentCard({ item }: { item: any }) {
 
         {/* Video */}
         <TabsContent value="video">
-          <div className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-            <Video className="mx-auto mb-2 h-8 w-8 opacity-40" />
-            <p className="font-medium">AI Video — Coming Soon</p>
-            <p className="mt-1 text-xs">Video lectures will be available in a future update.</p>
-          </div>
+          {item.video_status === "COMPLETED" && item.video_url ? (
+            <div className="rounded-xl border border-border bg-elevated/40 overflow-hidden">
+              <div className="aspect-video bg-black flex items-center justify-center">
+                <video 
+                  controls 
+                  controlsList="nodownload"
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="w-full h-full object-contain"
+                  src={`${(import.meta.env as any)['VITE_API_URL']?.replace('/api', '') || "http://localhost:3001"}${item.video_url}`}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+              <Video className="mx-auto mb-2 h-8 w-8 opacity-40" />
+              <p className="font-medium">Video not available</p>
+              <p className="mt-1 text-xs">The video for this topic has not been generated or published yet.</p>
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>

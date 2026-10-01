@@ -34,7 +34,108 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { request, getAuthToken } from "@/services/api";
+import { videoService } from "@/services";
 import ReactMarkdown from "react-markdown";
+
+function VideoGenerationSection({ topicId, contentData }: { topicId: string, contentData: any }) {
+  const queryClient = useQueryClient();
+  const videoStatusQuery = useQuery({
+    queryKey: ["video", "status", topicId],
+    queryFn: () => videoService.status(topicId),
+    refetchInterval: (query) => {
+      const st = query.state.data?.status;
+      return st === "QUEUED" || st === "PROCESSING" ? 3000 : false;
+    },
+  });
+
+  const generateMutation = useMutation({
+    mutationFn: () => videoService.generate(topicId),
+    onSuccess: () => {
+      toast.success("Video generation queued successfully.");
+      queryClient.invalidateQueries({ queryKey: ["video", "status", topicId] });
+    },
+    onError: (err: any) => toast.error(err.message || "Failed to start video generation."),
+  });
+
+  const hasPPT = contentData.ppt_content && contentData.ppt_content.length > 0;
+  
+  if (!hasPPT) {
+    return (
+      <div className="rounded-xl border border-border bg-elevated/40 p-8 text-center text-muted-foreground">
+        <Presentation className="mx-auto mb-3 h-10 w-10 opacity-40" />
+        <p className="font-medium">No presentation available</p>
+        <p className="mt-1 text-sm">You must generate a presentation first before creating a video.</p>
+      </div>
+    );
+  }
+
+  const status = videoStatusQuery.data?.status || "NOT_STARTED";
+  const videoUrl = videoStatusQuery.data?.video_url;
+
+  if (status === "NOT_STARTED" || status === "FAILED") {
+    return (
+      <div className="rounded-xl border border-border bg-elevated/40 p-8 text-center text-muted-foreground">
+        <MonitorPlay className="mx-auto mb-3 h-10 w-10 text-primary" />
+        <h3 className="text-lg font-semibold text-foreground">Generate AI Lecture Video</h3>
+        <p className="mt-1 text-sm max-w-lg mx-auto mb-6">
+          Convert your presentation and script into a full lecture video featuring your cloned voice, synchronized with the slides.
+        </p>
+        {status === "FAILED" && (
+          <p className="text-sm text-destructive font-semibold mb-4">Previous generation failed. Please try again.</p>
+        )}
+        <Button onClick={() => generateMutation.mutate()} disabled={generateMutation.isPending} className="gap-2">
+          {generateMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+          Generate Video
+        </Button>
+      </div>
+    );
+  }
+
+  if (status === "QUEUED" || status === "PROCESSING") {
+    return (
+      <div className="rounded-xl border border-border bg-elevated/40 p-12 text-center">
+        <Loader2 className="mx-auto mb-4 h-12 w-12 animate-spin text-primary" />
+        <h3 className="text-lg font-semibold text-foreground">
+          {status === "QUEUED" ? "Video is Queued" : "Generating AI Video..."}
+        </h3>
+        <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
+          This process takes several minutes. We are synthesizing your voice and rendering the presentation slides into a video. You can leave this page and check back later.
+        </p>
+      </div>
+    );
+  }
+
+  if (status === "COMPLETED" && videoUrl) {
+    const fullVideoUrl = `${(import.meta.env as any)['VITE_API_URL']?.replace('/api', '') || "http://localhost:3001"}${videoUrl}`;
+    return (
+      <div className="rounded-xl border border-border bg-elevated/40 overflow-hidden">
+        <div className="aspect-video bg-black flex items-center justify-center relative">
+          <video 
+            controls 
+            className="w-full h-full object-contain"
+            src={fullVideoUrl}
+            poster="/placeholder.svg" // Replace with actual slide image if available
+          />
+        </div>
+        <div className="p-4 flex items-center justify-between border-t border-border bg-background">
+          <div className="flex items-center gap-2">
+            <span className="flex h-2 w-2 rounded-full bg-emerald-500"></span>
+            <span className="text-sm font-medium text-emerald-500">Video Ready</span>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" asChild className="gap-2">
+              <a href={fullVideoUrl} download>
+                <Download className="h-4 w-4" /> Download MP4
+              </a>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
 
 export const Route = createFileRoute("/faculty/content/$topicId")({
   head: () => ({
@@ -645,12 +746,15 @@ function ContentViewerPage() {
 
         {/* ── AI Video Tab ── */}
         <TabsContent value="video">
-          <div className="panel p-10 text-center text-muted-foreground">
-            <MonitorPlay className="mx-auto mb-3 h-10 w-10 opacity-40" />
-            <p className="font-medium">AI Video — Coming Soon</p>
-            <p className="mt-1 text-sm">
-              AI video generation will be implemented in a future release. The presentation script is already available in the Presentation tab.
-            </p>
+          <div className="panel p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 font-semibold text-foreground">
+                <MonitorPlay className="h-4 w-4 text-primary" /> AI Lecture Video
+              </h2>
+            </div>
+            
+            <VideoGenerationSection topicId={topicId} contentData={contentData} />
+            
           </div>
         </TabsContent>
       </Tabs>

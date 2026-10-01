@@ -28,8 +28,26 @@ export const Route = createFileRoute("/faculty/settings")({
 
 function VoiceProfileSection() {
   const [fileName, setFileName] = useState<string | null>(null);
-  const profile = useQuery({ queryKey: ["voice", "profile"], queryFn: voiceService.profile });
-  const status = profile.data?.status ?? "none";
+  const [uploading, setUploading] = useState(false);
+  
+  const statusQuery = useQuery({ queryKey: ["voice", "status"], queryFn: voiceService.status });
+  const hasVoice = statusQuery.data?.has_voice ?? false;
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setFileName(file.name);
+    setUploading(true);
+    try {
+      await voiceService.uploadSample(file);
+      await statusQuery.refetch();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to upload voice sample.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
     <section className="panel p-6">
@@ -40,8 +58,8 @@ function VoiceProfileSection() {
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-semibold text-foreground">AI voice profile</h2>
-            <Badge variant={status === "ready" ? "default" : "secondary"}>
-              {status === "none" ? "not set up" : status}
+            <Badge variant={hasVoice ? "default" : "secondary"}>
+              {hasVoice ? "ready" : "not set up"}
             </Badge>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -53,34 +71,31 @@ function VoiceProfileSection() {
 
       <Separator className="my-5" />
 
-      <div className="flex flex-wrap items-center gap-3">
-        <Button variant="secondary" asChild>
-          <label className="cursor-pointer">
-            <Upload className="mr-2 h-4 w-4" /> Upload voice sample
-            <input
-              type="file"
-              accept="audio/*"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (!file) return;
-                setFileName(file.name);
-                void voiceService.uploadSample(file.name).catch(() => null);
-                e.target.value = "";
-              }}
-            />
-          </label>
-        </Button>
-        <Button variant="ghost" onClick={() => void voiceService.remove().catch(() => null)}>
-          <Trash2 className="mr-2 h-4 w-4" /> Remove profile
-        </Button>
-        {fileName ? (
-          <span className="text-sm text-muted-foreground">Selected: {fileName}</span>
-        ) : null}
+      <div className="flex flex-col gap-4">
+        <div className="rounded-lg bg-muted p-4 text-sm text-muted-foreground">
+          <p className="font-semibold text-foreground mb-2">Please read the following sentence clearly to clone your voice:</p>
+          <p className="italic">"Hello, my name is [Your Name]. I am a faculty member recording my voice for TeachAI to create personalized, high-quality educational videos for my students."</p>
+          <p className="mt-2 text-xs">Recommended: 60–120 seconds of clear speech, minimal background noise. You can read additional text if needed.</p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <Button variant="secondary" asChild disabled={uploading}>
+            <label className="cursor-pointer">
+              <Upload className="mr-2 h-4 w-4" /> {uploading ? "Uploading..." : "Upload voice sample"}
+              <input
+                type="file"
+                accept="audio/*"
+                className="hidden"
+                onChange={handleUpload}
+                disabled={uploading}
+              />
+            </label>
+          </Button>
+          {fileName ? (
+            <span className="text-sm text-muted-foreground">Selected: {fileName}</span>
+          ) : null}
+        </div>
       </div>
-      <p className="mt-4 text-xs text-muted-foreground">
-        Recommended: 60–120 seconds of clear speech, minimal background noise.
-      </p>
     </section>
   );
 }

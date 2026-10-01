@@ -123,7 +123,8 @@ export const endpoints = {
     detail: (id: string) => `/materials/${id}`,
     publish: (id: string) => `/materials/${id}/publish`,
   },
-  voice: { profile: "/voice/profile", sample: "/voice/profile/sample" },
+  voice: { status: "/voice/status", upload: "/voice/upload" },
+  videos: { generate: (topicId: string) => `/videos/generate/${topicId}`, status: (topicId: string) => `/videos/status/${topicId}` },
   stats: { faculty: "/stats/faculty", student: "/stats/student" },
   notifications: { list: "/notifications" },
 } as const;

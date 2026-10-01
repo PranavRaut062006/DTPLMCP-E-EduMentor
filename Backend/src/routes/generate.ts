@@ -228,16 +228,39 @@ Return ONLY a valid JSON object with this EXACT structure (no markdown fences, n
   ${slidesField}
 }`;
 
-      const result = await model.generateContent(prompt);
-      const rawText = result.response.text().replace(/```json|```/g, '').trim();
-      let generatedData: any;
+      const MAX_RETRIES = 3;
+      let generatedData: any = null;
+      let attempt = 0;
 
-      try {
-        generatedData = JSON.parse(rawText);
-      } catch (e) {
-        console.error(`[Generate] Failed to parse AI output for topic "${topic.title}":`, rawText.substring(0, 200));
-        continue;
+      while (attempt < MAX_RETRIES && !generatedData) {
+        attempt++;
+        try {
+          const result = await model.generateContent(prompt);
+          let rawText = result.response.text();
+          
+          // Clean up markdown code blocks if the model still includes them
+          rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+          
+          // Sometimes the model might prepend extra text before the first '{'
+          const firstBrace = rawText.indexOf('{');
+          const lastBrace = rawText.lastIndexOf('}');
+          if (firstBrace !== -1 && lastBrace !== -1) {
+            rawText = rawText.substring(firstBrace, lastBrace + 1);
+          }
+          
+          generatedData = JSON.parse(rawText);
+        } catch (e: any) {
+          console.error(`[Generate] Attempt ${attempt} failed for topic "${topic.title}":`, e.message || 'Parse error');
+          if (attempt === MAX_RETRIES) {
+            console.error(`[Generate] Failed to generate/parse AI output after ${MAX_RETRIES} attempts.`);
+          } else {
+            // Wait before retrying (exponential backoff)
+            await new Promise(resolve => setTimeout(resolve, attempt * 2000));
+          }
+        }
       }
+
+      if (!generatedData) continue;
 
       const contentDoc: Content = {
         id: uuidv4(),
