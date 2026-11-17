@@ -54,7 +54,7 @@ const expandSlideScriptsForDuration = async (topicTitle, slides, targetDurationM
     const targetWordsPerSlide = Math.max(30, Math.round(targetTotalWords / Math.max(1, slides.length)));
     console.log(`[VideoWorker] Expanding narration: target ${targetDurationMinutes} min (${targetTotalSeconds}s), total ~${targetTotalWords} words (~${targetWordsPerSlide} words/slide across ${slides.length} slides)`);
     const genAI = new generative_ai_1.GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const CANDIDATE_MODELS = ['gemini-3.8-flash', 'gemini-3.5-flash', 'gemini-flash-lite-latest'];
+    const CANDIDATE_MODELS = ['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemini-3.8-flash'];
     const slidesOverview = slides.map((s, idx) => {
         const bullets = (s.bullets || []).join('; ');
         return `Slide ${idx + 1}: Title: "${s.title || ''}" | Key Points: ${bullets || 'Overview'}`;
@@ -222,7 +222,9 @@ const generateVideoForTopic = async (topicId, userId) => {
         const toleranceSeconds = Math.max(2, targetSeconds * 0.02); // ±2% or ±2s
         console.log(`[VideoWorker] Processing video for topic: "${topicTitle}". Target: ${targetMinutes}m (${targetSeconds}s ±${toleranceSeconds.toFixed(1)}s)`);
         const slides = content.ppt_content;
-        const elevenlabs = new elevenlabs_1.ElevenLabsClient({ apiKey: process.env.ELEVENLABS_API_KEY });
+        const elevenlabs = process.env.ELEVENLABS_API_KEY
+            ? new elevenlabs_1.ElevenLabsClient({ apiKey: process.env.ELEVENLABS_API_KEY })
+            : null;
         // Step A: Duration-aware narration script check & expansion
         const currentWordCount = slides.reduce((acc, s) => acc + countWords(s.script || ''), 0);
         const targetWords = Math.round(targetSeconds * 2.25);
@@ -346,7 +348,7 @@ const generateVideoForTopic = async (topicId, userId) => {
             await page.close();
             // B2. Synthesize audio — free priority chain: XTTS (cloned) → Google TTS
             const speakerSamplePath = user?.voice_sample_path;
-            if (process.env.ELEVENLABS_API_KEY) {
+            if (process.env.ELEVENLABS_API_KEY && elevenlabs) {
                 // ElevenLabs path (if API key is configured)
                 await synthesizeSlideAudio(elevenlabs, voiceIdToUse, script, slideAudioPath);
             }
