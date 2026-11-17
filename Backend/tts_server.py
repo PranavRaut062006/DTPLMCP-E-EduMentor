@@ -81,11 +81,14 @@ async def synthesize(
                     f.write(content)
 
             if USE_XTTS and speaker_path:
-                # Voice cloning mode
+                # Voice cloning mode with tuned parameters for natural Indian English fidelity
                 tts.tts_to_file(
                     text=text,
                     speaker_wav=speaker_path,
                     language=language,
+                    temperature=0.6,
+                    repetition_penalty=10.0,
+                    top_p=0.8,
                     file_path=out_path
                 )
             elif USE_XTTS:
