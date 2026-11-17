@@ -2,6 +2,7 @@ import { getDB, Content, User, Topic } from '../db';
 import puppeteer from 'puppeteer';
 import { ElevenLabsClient } from 'elevenlabs';
 import ffmpeg from 'fluent-ffmpeg';
+import { synthesizeFreeTTS } from './freeTTS';
 import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
 import ffprobeInstaller from '@ffprobe-installer/ffprobe';
 import { GoogleGenerativeAI } from '@google/generative-ai';
@@ -55,7 +56,7 @@ const expandSlideScriptsForDuration = async (
   console.log(`[VideoWorker] Expanding narration: target ${targetDurationMinutes} min (${targetTotalSeconds}s), total ~${targetTotalWords} words (~${targetWordsPerSlide} words/slide across ${slides.length} slides)`);
 
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const CANDIDATE_MODELS = ['gemini-3.5-flash', 'gemini-flash-lite-latest', 'gemini-2.5-flash'];
+  const CANDIDATE_MODELS = ['gemini-3.8-flash', 'gemini-3.5-flash', 'gemini-flash-lite-latest'];
 
   const slidesOverview = slides.map((s, idx) => {
     const bullets = (s.bullets || []).join('; ');
@@ -372,8 +373,15 @@ export const generateVideoForTopic = async (topicId: string, userId: string) => 
       await page.screenshot({ path: slideImagePath });
       await page.close();
 
-      // B2. Synthesize audio
-      await synthesizeSlideAudio(elevenlabs, voiceIdToUse, script, slideAudioPath);
+      // B2. Synthesize audio — free priority chain: XTTS (cloned) → Google TTS
+      const speakerSamplePath = user?.voice_sample_path as string | undefined;
+      if (process.env.ELEVENLABS_API_KEY) {
+        // ElevenLabs path (if API key is configured)
+        await synthesizeSlideAudio(elevenlabs, voiceIdToUse, script, slideAudioPath);
+      } else {
+        // Fully free path: XTTS server or Google TTS
+        await synthesizeFreeTTS(script, slideAudioPath, speakerSamplePath);
+      }
 
       // B3. Measure audio duration with ffprobe
       const duration = await getMediaDuration(slideAudioPath);

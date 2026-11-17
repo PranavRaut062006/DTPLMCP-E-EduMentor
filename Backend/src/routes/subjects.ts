@@ -69,7 +69,7 @@ router.post('/:id/syllabus', upload.single('syllabus'), async (req: any, res) =>
     }
     
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.8-flash" });
     
     const prompt = `
       You are an expert academic curriculum parser. 

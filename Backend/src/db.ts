@@ -51,6 +51,7 @@ export interface User {
   voice_provider?: string;
   voice_configured?: boolean;
   voice_sample_name?: string;
+  voice_sample_path?: string;
   youtube_tokens?: {
     access_token?: string;
     refresh_token?: string;

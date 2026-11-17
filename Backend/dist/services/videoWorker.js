@@ -8,6 +8,7 @@ const db_1 = require("../db");
 const puppeteer_1 = __importDefault(require("puppeteer"));
 const elevenlabs_1 = require("elevenlabs");
 const fluent_ffmpeg_1 = __importDefault(require("fluent-ffmpeg"));
+const freeTTS_1 = require("./freeTTS");
 const ffmpeg_1 = __importDefault(require("@ffmpeg-installer/ffmpeg"));
 const ffprobe_1 = __importDefault(require("@ffprobe-installer/ffprobe"));
 const generative_ai_1 = require("@google/generative-ai");
@@ -53,7 +54,7 @@ const expandSlideScriptsForDuration = async (topicTitle, slides, targetDurationM
     const targetWordsPerSlide = Math.max(30, Math.round(targetTotalWords / Math.max(1, slides.length)));
     console.log(`[VideoWorker] Expanding narration: target ${targetDurationMinutes} min (${targetTotalSeconds}s), total ~${targetTotalWords} words (~${targetWordsPerSlide} words/slide across ${slides.length} slides)`);
     const genAI = new generative_ai_1.GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const CANDIDATE_MODELS = ['gemini-3.5-flash', 'gemini-flash-lite-latest', 'gemini-2.5-flash'];
+    const CANDIDATE_MODELS = ['gemini-3.8-flash', 'gemini-3.5-flash', 'gemini-flash-lite-latest'];
     const slidesOverview = slides.map((s, idx) => {
         const bullets = (s.bullets || []).join('; ');
         return `Slide ${idx + 1}: Title: "${s.title || ''}" | Key Points: ${bullets || 'Overview'}`;
@@ -343,8 +344,16 @@ const generateVideoForTopic = async (topicId, userId) => {
             await page.setContent(html);
             await page.screenshot({ path: slideImagePath });
             await page.close();
-            // B2. Synthesize audio
-            await synthesizeSlideAudio(elevenlabs, voiceIdToUse, script, slideAudioPath);
+            // B2. Synthesize audio — free priority chain: XTTS (cloned) → Google TTS
+            const speakerSamplePath = user?.voice_sample_path;
+            if (process.env.ELEVENLABS_API_KEY) {
+                // ElevenLabs path (if API key is configured)
+                await synthesizeSlideAudio(elevenlabs, voiceIdToUse, script, slideAudioPath);
+            }
+            else {
+                // Fully free path: XTTS server or Google TTS
+                await (0, freeTTS_1.synthesizeFreeTTS)(script, slideAudioPath, speakerSamplePath);
+            }
             // B3. Measure audio duration with ffprobe
             const duration = await (0, exports.getMediaDuration)(slideAudioPath);
             slideDurations.push(duration);

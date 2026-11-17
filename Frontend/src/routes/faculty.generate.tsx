@@ -11,11 +11,15 @@ import {
   Globe,
   Link2,
   Loader2,
+  Mic,
   Presentation,
   Sparkles,
   Upload,
+  Volume2,
   Youtube,
 } from "lucide-react";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 import { PageHeader } from "@/components/common/PageHeader";
 import { EmptyState } from "@/components/common/EmptyState";
 import { Button } from "@/components/ui/button";
@@ -33,7 +37,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { syllabusService, generationService } from "@/services";
+import { syllabusService, generationService, voiceService } from "@/services";
 import { kindMeta } from "@/components/faculty/MaterialRow";
 import type { ContentKind, ReferenceItem, ReferenceKind } from "@/services/types";
 
@@ -81,6 +85,7 @@ const referenceKinds: { kind: ReferenceKind; label: string; icon: typeof Globe }
 function GeneratePage() {
   const { classroomId } = Route.useSearch();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [step, setStep] = useState(0);
   const [topicIds, setTopicIds] = useState<string[]>([]);
@@ -93,11 +98,63 @@ function GeneratePage() {
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<any[] | null>(null);
 
+  // Voice Upload state inside generator
+  const [voiceFile, setVoiceFile] = useState<File | null>(null);
+  const [voiceUploading, setVoiceUploading] = useState(false);
+  const [voiceConsent, setVoiceConsent] = useState(false);
+  const [previewingVoice, setPreviewingVoice] = useState(false);
+  const [previewAudioUrl, setPreviewAudioUrl] = useState<string | null>(null);
+
+  const voiceStatus = useQuery({
+    queryKey: ["voice", "status"],
+    queryFn: voiceService.status,
+  });
+
   const syllabus = useQuery({
     queryKey: ["syllabus", classroomId],
     queryFn: () => syllabusService.get(classroomId),
     enabled: Boolean(classroomId),
   });
+
+  async function handleVoiceUpload() {
+    if (!voiceFile) {
+      toast.error("Please select an audio file (.mp3 or .wav)");
+      return;
+    }
+    if (!voiceConsent) {
+      toast.error("Please confirm authorization consent.");
+      return;
+    }
+    setVoiceUploading(true);
+    try {
+      const res = await voiceService.uploadSample(voiceFile, voiceConsent);
+      toast.success(res.message || "Voice uploaded & configured successfully!");
+      setVoiceFile(null);
+      queryClient.invalidateQueries({ queryKey: ["voice", "status"] });
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to upload voice sample.");
+    } finally {
+      setVoiceUploading(false);
+    }
+  }
+
+  async function handlePreviewVoice() {
+    setPreviewingVoice(true);
+    try {
+      const res = await voiceService.preview();
+      const fullUrl = res.preview_url.startsWith("http")
+        ? res.preview_url
+        : `http://localhost:3001${res.preview_url}`;
+      setPreviewAudioUrl(fullUrl);
+      const audio = new Audio(fullUrl);
+      audio.play().catch(() => {});
+      toast.success("Playing cloned voice preview.");
+    } catch (err: any) {
+      toast.error(err?.message || "Could not preview voice.");
+    } finally {
+      setPreviewingVoice(false);
+    }
+  }
 
   const canContinue = useMemo(() => {
     if (step === 0) return topicIds.length > 0;
@@ -384,6 +441,107 @@ function GeneratePage() {
                 );
               })}
             </div>
+
+            {/* Voice Cloning Configuration (shows when "video" is selected) */}
+            {outputs.includes("video") && (
+              <div className="rounded-2xl border border-primary/30 bg-primary/5 p-5 space-y-4">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <Mic className="h-5 w-5 text-primary" />
+                    <div>
+                      <h4 className="text-sm font-semibold text-foreground">Lecture Voice Cloning</h4>
+                      <p className="text-xs text-muted-foreground">
+                        Your custom voice will narrate the generated video slides.
+                      </p>
+                    </div>
+                  </div>
+                  <Badge variant={voiceStatus.data?.has_voice ? "default" : "secondary"}>
+                    {voiceStatus.data?.has_voice ? "✓ Cloned Voice Active" : "Default Voice"}
+                  </Badge>
+                </div>
+
+                {voiceStatus.data?.has_voice ? (
+                  <div className="flex items-center justify-between rounded-xl border border-border bg-background/60 p-3 text-xs">
+                    <span className="text-muted-foreground">
+                      Source sample: <strong className="text-foreground">{voiceStatus.data?.sample_name || "Custom Voice"}</strong>
+                    </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handlePreviewVoice}
+                      disabled={previewingVoice}
+                      className="gap-1.5 h-7 text-xs"
+                    >
+                      {previewingVoice ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Volume2 className="h-3.5 w-3.5" />}
+                      Test Cloned Voice
+                    </Button>
+                  </div>
+                ) : null}
+
+                {/* Upload or Replace Voice Sample */}
+                <div className="space-y-3 pt-1 border-t border-border/50">
+                  <Label className="text-xs font-medium">
+                    {voiceStatus.data?.has_voice ? "Replace Voice Recording:" : "Upload Voice Sample (.mp3 or .wav):"}
+                  </Label>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Button type="button" variant="secondary" size="sm" asChild disabled={voiceUploading}>
+                      <label className="cursor-pointer gap-2 text-xs">
+                        <Upload className="h-3.5 w-3.5" /> Choose Audio File
+                        <input
+                          type="file"
+                          accept=".mp3,.wav,audio/mpeg,audio/wav"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] || null;
+                            setVoiceFile(file);
+                          }}
+                          disabled={voiceUploading}
+                        />
+                      </label>
+                    </Button>
+                    {voiceFile && (
+                      <span className="text-xs text-foreground font-medium truncate max-w-[200px]">
+                        {voiceFile.name} ({(voiceFile.size / 1024).toFixed(0)} KB)
+                      </span>
+                    )}
+                  </div>
+
+                  {voiceFile && (
+                    <div className="space-y-3 pt-2">
+                      <label className="flex items-start gap-2 cursor-pointer text-xs text-muted-foreground">
+                        <Checkbox
+                          checked={voiceConsent}
+                          onCheckedChange={(checked) => setVoiceConsent(Boolean(checked))}
+                          className="mt-0.5"
+                        />
+                        <span>
+                          I confirm this is my own voice recording or I have explicit permission to clone it.
+                        </span>
+                      </label>
+
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={handleVoiceUpload}
+                        disabled={voiceUploading || !voiceConsent}
+                        className="gap-2 text-xs"
+                      >
+                        {voiceUploading ? (
+                          <>
+                            <Loader2 className="h-3.5 w-3.5 animate-spin" /> Uploading & Cloning...
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle2 className="h-3.5 w-3.5" /> Save Cloned Voice
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {running ? (
               <div className="rounded-2xl border border-border bg-elevated/60 p-5">

@@ -68,7 +68,7 @@ router.post('/:id/syllabus', upload.single('syllabus'), async (req, res) => {
             return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
         }
         const genAI = new generative_ai_1.GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-3.8-flash" });
         const prompt = `
       You are an expert academic curriculum parser. 
       Read the following syllabus text for a subject named "${subject.name}" (${subject.code}).
