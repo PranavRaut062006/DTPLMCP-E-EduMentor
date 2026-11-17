@@ -54,12 +54,37 @@ async function buildSyllabusUnits(subjectId: string, db: Db) {
   }));
 }
 
+/** Generate content with Gemini with model fallback chain and retry for 503/429 spikes */
+async function callGeminiWithFallback(prompt: string): Promise<string> {
+  if (!process.env.GEMINI_API_KEY) throw new Error('GEMINI_API_KEY not configured');
+
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  // Fast, available, low-latency models first to prevent timeouts
+  const models = ['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemini-flash-lite-latest', 'gemini-3.8-flash'];
+
+  for (const modelName of models) {
+    try {
+      console.log(`[Gemini] Requesting with fast model "${modelName}"...`);
+      const model = genAI.getGenerativeModel({ model: modelName });
+      const res = await model.generateContent(prompt);
+      const text = res.response.text();
+      if (text) {
+        console.log(`[Gemini] ✅ Success with "${modelName}"`);
+        return text;
+      }
+    } catch (err: any) {
+      console.warn(`[Gemini] Model "${modelName}" failed:`, err.message || err);
+    }
+  }
+  throw new Error('All Gemini candidate models are currently busy. Please try again in a moment.');
+}
+
 /** Generate PPT slides for a single topic using Gemini. Returns slide array or null. */
 async function generateSlidesForTopic(topic: Topic, durationHours: number) {
   if (!process.env.GEMINI_API_KEY) return null;
 
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-3.8-flash' });
 
   const prompt = `
     Create a teaching plan and lecture script for the topic: "${topic.title}".
@@ -90,10 +115,14 @@ async function generateSlidesForTopic(topic: Topic, durationHours: number) {
     6. visualPrompt is required only when layout is "image_right", otherwise keep it empty string "".
   `;
 
-  const result = await model.generateContent(prompt);
-  const responseText = result.response.text();
-  const parsed = JSON.parse(responseText.replace(/```json|```/g, '').trim());
-  return parsed as { plan: string; slides: any[] };
+  try {
+    const responseText = await callGeminiWithFallback(prompt);
+    const parsed = JSON.parse(responseText.replace(/```json|```/g, '').trim());
+    return parsed as { plan: string; slides: any[] };
+  } catch (err: any) {
+    console.error(`[generateSlidesForTopic] Error for "${topic.title}":`, err.message || err);
+    return null;
+  }
 }
 
 // ─── Routes ────────────────────────────────────────────────────────────────
@@ -264,9 +293,6 @@ router.post('/:id/syllabus/upload', upload.single('syllabus'), async (req: any, 
       return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-
     const extractPrompt = `
       You are an expert academic curriculum parser.
       Read the following syllabus text for a subject named "${subject.name}" (${subject.code}).
@@ -289,8 +315,7 @@ router.post('/:id/syllabus/upload', upload.single('syllabus'), async (req: any, 
     `;
 
     console.log('[Syllabus Upload] Sending to Gemini for structure extraction...');
-    const extractResult = await model.generateContent(extractPrompt);
-    const extractText = extractResult.response.text();
+    const extractText = await callGeminiWithFallback(extractPrompt);
 
     let unitsData: { unit_number: number; title: string; topics: { title: string; subtopics: string[] }[] }[];
     try {

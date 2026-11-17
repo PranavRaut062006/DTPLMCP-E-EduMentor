@@ -33,7 +33,7 @@ router.post('/', async (req: any, res) => {
 
     const db = getDB();
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const CANDIDATE_MODELS = ['gemini-3.5-flash', 'gemini-flash-lite-latest', 'gemini-2.5-flash'];
+    const CANDIDATE_MODELS = ['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemini-flash-lite-latest', 'gemini-3.8-flash'];
 
     const referencesText = references.length > 0
       ? references.map((r: any) => `${r.kind}: ${r.label}`).join(', ')
@@ -336,7 +336,7 @@ router.post('/topic/:topicId', async (req: any, res) => {
 
     if (process.env.GEMINI_API_KEY) {
       const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-3.8-flash" });
       const prompt = `Create a teaching plan and lecture script for the topic: "${topic.title}". Subtopics: ${topic.subtopics.join(', ')}. Duration: ${durationHours} hours. References: ${references}. Return ONLY JSON: { "plan": "...", "slides": [{ "title": "", "bullets": [], "script": "", "layout": "standard", "visualPrompt": "" }] }`;
       const result = await model.generateContent(prompt);
       const responseText = result.response.text();

@@ -11,6 +11,7 @@ const elevenlabs_1 = require("elevenlabs");
 const auth_1 = require("../middleware/auth");
 const db_1 = require("../db");
 const dotenv_1 = __importDefault(require("dotenv"));
+const freeTTS_1 = require("../services/freeTTS");
 dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../../.env') });
 const router = express_1.default.Router();
 const uploadDir = path_1.default.join(__dirname, '../../../uploads/voices');
@@ -56,14 +57,33 @@ router.post('/upload', auth_1.authMiddleware, upload.single('voiceSample'), asyn
                 error: 'Consent confirmation is required: you must confirm that you own the recording or have explicit permission to clone this voice.'
             });
         }
-        if (!process.env.ELEVENLABS_API_KEY) {
-            if (fs_1.default.existsSync(req.file.path))
-                fs_1.default.unlinkSync(req.file.path);
-            return res.status(500).json({ error: 'ELEVENLABS_API_KEY is not configured on the server.' });
-        }
-        // Save a persistent copy of the user's voice sample
+        // Save a persistent copy of the user's voice sample (used by XTTS for free cloning)
         const persistentSamplePath = path_1.default.join(uploadDir, `faculty_${user_id}${ext}`);
         fs_1.default.copyFileSync(req.file.path, persistentSamplePath);
+        // ── If NO ElevenLabs key, use local free voice cloning (XTTS) ──────────────
+        if (!process.env.ELEVENLABS_API_KEY) {
+            await db.collection('users').updateOne({ id: user_id }, {
+                $set: {
+                    custom_voice_id: `local_${user_id}`,
+                    voice_id: `local_${user_id}`,
+                    voice_provider: 'xtts_local',
+                    voice_configured: true,
+                    voice_sample_path: persistentSamplePath,
+                    voice_sample_name: req.file.originalname,
+                }
+            });
+            if (fs_1.default.existsSync(req.file.path))
+                fs_1.default.unlinkSync(req.file.path);
+            return res.json({
+                success: true,
+                voice_id: `local_${user_id}`,
+                voice_configured: true,
+                voice_provider: 'xtts_local',
+                sample_name: req.file.originalname,
+                message: 'Voice sample saved locally. Free voice cloning will be used for video generation.'
+            });
+        }
+        // ── ElevenLabs path (paid) ───────────────────────────────────────────────
         const client = new elevenlabs_1.ElevenLabsClient({
             apiKey: process.env.ELEVENLABS_API_KEY,
         });
@@ -174,6 +194,19 @@ router.post('/preview', auth_1.authMiddleware, async (req, res) => {
         }
         const voiceId = user.custom_voice_id;
         const previewText = `Hello, this is a sample preview of your cloned faculty voice for TeachAI lecture narration.`;
+        // ── Free XTTS preview path ───────────────────────────────────────────────
+        if (!process.env.ELEVENLABS_API_KEY) {
+            const previewFileName = `preview_${user_id}.mp3`;
+            const previewFilePath = path_1.default.join(PREVIEW_DIR, previewFileName);
+            const speakerPath = user.voice_sample_path;
+            await (0, freeTTS_1.synthesizeFreeTTS)(previewText, previewFilePath, speakerPath);
+            return res.json({
+                success: true,
+                preview_url: `/videos/previews/${previewFileName}?t=${Date.now()}`,
+                provider: speakerPath ? 'xtts_cloned' : 'google_tts',
+            });
+        }
+        // ── ElevenLabs paid preview ──────────────────────────────────────────────
         if (!process.env.ELEVENLABS_API_KEY) {
             return res.status(500).json({ error: 'ELEVENLABS_API_KEY not configured.' });
         }
