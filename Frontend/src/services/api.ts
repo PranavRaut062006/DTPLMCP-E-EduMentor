@@ -123,8 +123,21 @@ export const endpoints = {
     detail: (id: string) => `/materials/${id}`,
     publish: (id: string) => `/materials/${id}/publish`,
   },
-  voice: { status: "/voice/status", upload: "/voice/upload" },
+  voice: {
+    status: "/voice/status",
+    upload: "/voice/upload",
+    setId: "/voice/set-id",
+    preview: "/voice/preview",
+    reset: "/voice/reset",
+  },
   videos: { generate: (topicId: string) => `/videos/generate/${topicId}`, status: (topicId: string) => `/videos/status/${topicId}` },
+  youtube: {
+    status: "/youtube/status",
+    credentials: "/youtube/credentials",
+    authUrl: (topicId?: string) => `/youtube/auth-url${topicId ? `?topicId=${topicId}` : ""}`,
+    upload: (topicId: string) => `/youtube/upload/${topicId}`,
+    disconnect: "/youtube/disconnect",
+  },
   stats: { faculty: "/stats/faculty", student: "/stats/student" },
   notifications: { list: "/notifications" },
 } as const;

@@ -19,7 +19,9 @@ router.use(auth_1.authMiddleware);
 // outputs: Array of 'teaching-plan' | 'ppt' | 'notes' | 'video'
 router.post('/', async (req, res) => {
     try {
-        const { classroomId, topicIds, durationMinutes = 45, references = [], outputs = ['teaching-plan', 'ppt', 'notes'] } = req.body;
+        const { classroomId, topicIds, references = [], outputs = ['teaching-plan', 'ppt', 'notes'] } = req.body;
+        const rawDuration = Number(req.body.durationMinutes) || 5;
+        const durationMinutes = Math.max(2, Math.min(20, Math.round(rawDuration)));
         if (!topicIds || topicIds.length === 0) {
             return res.status(400).json({ error: 'No topics selected' });
         }
@@ -28,7 +30,7 @@ router.post('/', async (req, res) => {
         }
         const db = (0, db_1.getDB)();
         const genAI = new generative_ai_1.GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+        const CANDIDATE_MODELS = ['gemini-3.5-flash', 'gemini-flash-lite-latest', 'gemini-2.5-flash'];
         const referencesText = references.length > 0
             ? references.map((r) => `${r.kind}: ${r.label}`).join(', ')
             : 'none — use general academic knowledge';
@@ -41,35 +43,35 @@ router.post('/', async (req, res) => {
             const wantPPT = outputs.includes('ppt');
             const wantNotes = outputs.includes('notes');
             const wantPlan = outputs.includes('teaching-plan');
-            // Calculate target slide count dynamically based on requested teaching duration
+            // Calculate target slide count dynamically based on requested teaching duration (2 to 20 minutes)
             const subtopicsCount = topic.subtopics ? topic.subtopics.length : 0;
             let targetSlides;
             let minSlides;
             let maxSlides;
-            if (durationMinutes <= 20) {
-                targetSlides = Math.max(7, Math.min(10, 6 + subtopicsCount));
-                minSlides = 6;
-                maxSlides = 10;
+            if (durationMinutes <= 3) {
+                targetSlides = Math.max(3, Math.min(5, 3 + subtopicsCount));
+                minSlides = 3;
+                maxSlides = 5;
             }
-            else if (durationMinutes <= 35) {
-                targetSlides = Math.max(10, Math.min(14, 8 + subtopicsCount));
-                minSlides = 9;
-                maxSlides = 14;
+            else if (durationMinutes <= 6) {
+                targetSlides = Math.max(5, Math.min(8, 4 + subtopicsCount));
+                minSlides = 4;
+                maxSlides = 8;
             }
-            else if (durationMinutes <= 60) {
-                targetSlides = Math.max(14, Math.min(19, 12 + subtopicsCount * 2));
-                minSlides = 13;
-                maxSlides = 19;
+            else if (durationMinutes <= 10) {
+                targetSlides = Math.max(8, Math.min(12, 6 + subtopicsCount));
+                minSlides = 7;
+                maxSlides = 12;
             }
-            else if (durationMinutes <= 120) {
-                targetSlides = Math.max(20, Math.min(28, 16 + subtopicsCount * 2));
-                minSlides = 18;
-                maxSlides = 28;
+            else if (durationMinutes <= 15) {
+                targetSlides = Math.max(11, Math.min(16, 9 + subtopicsCount));
+                minSlides = 10;
+                maxSlides = 16;
             }
             else {
-                targetSlides = Math.max(26, Math.min(36, 20 + subtopicsCount * 3));
-                minSlides = 24;
-                maxSlides = 38;
+                targetSlides = Math.max(14, Math.min(20, 12 + subtopicsCount));
+                minSlides = 13;
+                maxSlides = 20;
             }
             const planField = wantPlan ? `"teaching_plan": "A detailed, well-structured academic teaching plan in Markdown format covering learning objectives, timeline breakdown, pedagogy, classroom activities, assessment criteria, and discussion questions. Minimum 400 words.",` : '';
             const notesField = wantNotes ? `"notes": "Comprehensive university-level student study notes in Markdown format with clear headings, subheadings, rigorous definitions, real-world examples, mathematical or conceptual formulations, and key review takeaways. Minimum 600 words.",` : '';
@@ -220,37 +222,34 @@ Return ONLY a valid JSON object with this EXACT structure (no markdown fences, n
   ${notesField}
   ${slidesField}
 }`;
-            const MAX_RETRIES = 3;
             let generatedData = null;
-            let attempt = 0;
-            while (attempt < MAX_RETRIES && !generatedData) {
-                attempt++;
+            for (const modelName of CANDIDATE_MODELS) {
+                if (generatedData)
+                    break;
                 try {
+                    console.log(`[Generate] Requesting content with model "${modelName}" for topic "${topic.title}"...`);
+                    const model = genAI.getGenerativeModel({ model: modelName });
                     const result = await model.generateContent(prompt);
                     let rawText = result.response.text();
-                    // Clean up markdown code blocks if the model still includes them
+                    // Clean up markdown code blocks if the model includes them
                     rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
-                    // Sometimes the model might prepend extra text before the first '{'
                     const firstBrace = rawText.indexOf('{');
                     const lastBrace = rawText.lastIndexOf('}');
                     if (firstBrace !== -1 && lastBrace !== -1) {
                         rawText = rawText.substring(firstBrace, lastBrace + 1);
                     }
                     generatedData = JSON.parse(rawText);
+                    console.log(`[Generate] Successfully generated content with model "${modelName}" for topic "${topic.title}"`);
+                    break;
                 }
                 catch (e) {
-                    console.error(`[Generate] Attempt ${attempt} failed for topic "${topic.title}":`, e.message || 'Parse error');
-                    if (attempt === MAX_RETRIES) {
-                        console.error(`[Generate] Failed to generate/parse AI output after ${MAX_RETRIES} attempts.`);
-                    }
-                    else {
-                        // Wait before retrying (exponential backoff)
-                        await new Promise(resolve => setTimeout(resolve, attempt * 2000));
-                    }
+                    console.warn(`[Generate] Model "${modelName}" failed for topic "${topic.title}":`, e.message || e);
                 }
             }
-            if (!generatedData)
+            if (!generatedData) {
+                console.error(`[Generate] All candidate models failed to generate content for topic "${topic.title}".`);
                 continue;
+            }
             const contentDoc = {
                 id: (0, uuid_1.v4)(),
                 topic_id: topicId,
@@ -258,6 +257,7 @@ Return ONLY a valid JSON object with this EXACT structure (no markdown fences, n
                 lecture_content: generatedData.teaching_plan || generatedData.notes || '',
                 ppt_content: generatedData.slides || [],
                 status: 'DRAFT',
+                duration_minutes: durationMinutes,
                 created_by: req.user.id,
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
@@ -268,6 +268,7 @@ Return ONLY a valid JSON object with this EXACT structure (no markdown fences, n
                         lecture_content: contentDoc.lecture_content,
                         ppt_content: contentDoc.ppt_content,
                         notes_content: generatedData.notes || null,
+                        duration_minutes: durationMinutes,
                         updated_at: contentDoc.updated_at,
                     } });
                 contentDoc.id = existing.id;

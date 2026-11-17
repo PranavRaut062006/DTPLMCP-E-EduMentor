@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Download,
+  ExternalLink,
   FileText,
   Globe,
   Loader2,
@@ -16,6 +17,7 @@ import {
   Sparkles,
   Trash2,
   Video,
+  Youtube,
 } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/common/PageHeader";
@@ -32,13 +34,50 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { request, getAuthToken } from "@/services/api";
-import { videoService } from "@/services";
+import { videoService, youtubeService } from "@/services";
 import ReactMarkdown from "react-markdown";
 
-function VideoGenerationSection({ topicId, contentData }: { topicId: string, contentData: any }) {
+function VideoGenerationSection({ topicId, contentData, topicTitle }: { topicId: string, contentData: any, topicTitle?: string }) {
   const queryClient = useQueryClient();
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [showConnectModal, setShowConnectModal] = useState(false);
+  const [ytTitle, setYtTitle] = useState(
+    topicTitle ? `${topicTitle} — Academic Lecture` : "TeachAI Academic Lecture"
+  );
+  const [ytDescription, setYtDescription] = useState(
+    topicTitle
+      ? `Academic lecture on "${topicTitle}" created with TeachAI.\n\nGenerated with AI slide visual synchronization and faculty narration.`
+      : "TeachAI AI-generated academic lecture video."
+  );
+  const [ytPrivacy, setYtPrivacy] = useState<"private" | "unlisted" | "public">("unlisted");
+  const [isUploadingYt, setIsUploadingYt] = useState(false);
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(contentData.youtube_url || null);
+
+  const youtubeStatusQuery = useQuery({
+    queryKey: ["youtube", "status"],
+    queryFn: youtubeService.status,
+  });
+
   const videoStatusQuery = useQuery({
     queryKey: ["video", "status", topicId],
     queryFn: () => videoService.status(topicId),
@@ -56,6 +95,43 @@ function VideoGenerationSection({ topicId, contentData }: { topicId: string, con
     },
     onError: (err: any) => toast.error(err.message || "Failed to start video generation."),
   });
+
+  const handleYouTubeClick = async () => {
+    if (!youtubeStatusQuery.data?.connected) {
+      setShowConnectModal(true);
+      return;
+    }
+    setShowUploadModal(true);
+  };
+
+  const handleConnectYouTube = async () => {
+    try {
+      const { authUrl } = await youtubeService.getAuthUrl(topicId);
+      window.location.href = authUrl;
+    } catch (err: any) {
+      toast.error(err?.message || "Could not initialize YouTube connection. Ensure Google OAuth credentials are set.");
+    }
+  };
+
+  const handleUploadSubmit = async () => {
+    setIsUploadingYt(true);
+    try {
+      const res = await youtubeService.upload(topicId, {
+        title: ytTitle,
+        description: ytDescription,
+        privacyStatus: ytPrivacy,
+      });
+      setUploadedUrl(res.youtubeUrl);
+      setShowUploadModal(false);
+      toast.success("Successfully uploaded lecture video to YouTube!");
+      queryClient.invalidateQueries({ queryKey: ["content", topicId] });
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err?.message || "YouTube upload failed.");
+    } finally {
+      setIsUploadingYt(false);
+    }
+  };
 
   const hasPPT = contentData.ppt_content && contentData.ppt_content.length > 0;
   
@@ -114,22 +190,150 @@ function VideoGenerationSection({ topicId, contentData }: { topicId: string, con
             controls 
             className="w-full h-full object-contain"
             src={fullVideoUrl}
-            poster="/placeholder.svg" // Replace with actual slide image if available
+            poster="/placeholder.svg"
           />
         </div>
-        <div className="p-4 flex items-center justify-between border-t border-border bg-background">
+        <div className="p-4 flex flex-wrap items-center justify-between gap-3 border-t border-border bg-background">
           <div className="flex items-center gap-2">
             <span className="flex h-2 w-2 rounded-full bg-emerald-500"></span>
             <span className="text-sm font-medium text-emerald-500">Video Ready</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button variant="outline" size="sm" asChild className="gap-2">
               <a href={fullVideoUrl} download>
                 <Download className="h-4 w-4" /> Download MP4
               </a>
             </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleYouTubeClick}
+              className="gap-2 border-red-500/30 text-red-500 hover:bg-red-500/10 hover:text-red-600"
+            >
+              <Youtube className="h-4 w-4 text-red-500" />
+              {uploadedUrl ? "Uploaded to YouTube" : "Upload to YouTube"}
+            </Button>
+            {uploadedUrl && (
+              <Button variant="secondary" size="sm" asChild className="gap-2">
+                <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="h-4 w-4" /> Open on YouTube
+                </a>
+              </Button>
+            )}
           </div>
         </div>
+
+        {/* Connect YouTube Modal */}
+        <Dialog open={showConnectModal} onOpenChange={setShowConnectModal}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Youtube className="h-5 w-5 text-red-500" /> Connect YouTube Channel
+              </DialogTitle>
+              <DialogDescription>
+                To upload this lecture directly to your YouTube channel, authorize TeachAI with your Google account.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-2 text-sm text-muted-foreground space-y-2">
+              {!youtubeStatusQuery.data?.configured ? (
+                <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-3 text-xs text-amber-300">
+                  <p className="font-semibold mb-1">YouTube Credentials Needed</p>
+                  <p>
+                    Please enter your Google OAuth Client ID and Client Secret in Settings before connecting your YouTube channel.
+                  </p>
+                </div>
+              ) : (
+                <p>
+                  TeachAI uses the official YouTube Data API v3 to upload your generated MP4 lectures.
+                  Click below to authorize upload permissions for your YouTube channel.
+                </p>
+              )}
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowConnectModal(false)}>Cancel</Button>
+              {!youtubeStatusQuery.data?.configured ? (
+                <Button asChild className="gap-2">
+                  <a href="/faculty/settings">Configure in Settings</a>
+                </Button>
+              ) : (
+                <Button onClick={handleConnectYouTube} className="gap-2 bg-red-600 hover:bg-red-700 text-white">
+                  <Youtube className="h-4 w-4" /> Connect with Google
+                </Button>
+              )}
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Upload Confirmation Modal */}
+        <Dialog open={showUploadModal} onOpenChange={setShowUploadModal}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Youtube className="h-5 w-5 text-red-500" /> Upload Lecture to YouTube
+              </DialogTitle>
+              <DialogDescription>
+                Review and customize the lecture details before publishing to your connected YouTube channel.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="yt-title">Video Title</Label>
+                <Input
+                  id="yt-title"
+                  value={ytTitle}
+                  onChange={(e) => setYtTitle(e.target.value)}
+                  placeholder="Enter video title"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="yt-desc">Video Description</Label>
+                <Textarea
+                  id="yt-desc"
+                  rows={4}
+                  value={ytDescription}
+                  onChange={(e) => setYtDescription(e.target.value)}
+                  placeholder="Enter video description"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="yt-privacy">Privacy Setting</Label>
+                <Select
+                  value={ytPrivacy}
+                  onValueChange={(val: any) => setYtPrivacy(val)}
+                >
+                  <SelectTrigger id="yt-privacy">
+                    <SelectValue placeholder="Select privacy" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="unlisted">Unlisted (Anyone with link can view)</SelectItem>
+                    <SelectItem value="private">Private (Only you can view)</SelectItem>
+                    <SelectItem value="public">Public (Visible to everyone)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowUploadModal(false)} disabled={isUploadingYt}>
+                Cancel
+              </Button>
+              <Button
+                onClick={handleUploadSubmit}
+                disabled={isUploadingYt || !ytTitle.trim()}
+                className="gap-2 bg-red-600 hover:bg-red-700 text-white"
+              >
+                {isUploadingYt ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" /> Uploading to YouTube...
+                  </>
+                ) : (
+                  <>
+                    <Youtube className="h-4 w-4" /> Publish to YouTube
+                  </>
+                )}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
@@ -753,7 +957,7 @@ function ContentViewerPage() {
               </h2>
             </div>
             
-            <VideoGenerationSection topicId={topicId} contentData={contentData} />
+            <VideoGenerationSection topicId={topicId} contentData={contentData} topicTitle={slides[0]?.title || "Lecture"} />
             
           </div>
         </TabsContent>

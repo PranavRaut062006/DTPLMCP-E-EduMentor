@@ -84,7 +84,7 @@ function GeneratePage() {
 
   const [step, setStep] = useState(0);
   const [topicIds, setTopicIds] = useState<string[]>([]);
-  const [duration, setDuration] = useState(45);
+  const [duration, setDuration] = useState(5);
   const [references, setReferences] = useState<ReferenceItem[]>([]);
   const [refKind, setRefKind] = useState<ReferenceKind>("book");
   const [refValue, setRefValue] = useState("");
@@ -244,10 +244,10 @@ function GeneratePage() {
             <div className="mt-6 flex items-center gap-6">
               <Slider
                 value={[duration]}
-                min={15}
-                max={180}
-                step={5}
-                onValueChange={([value]) => setDuration(value ?? 45)}
+                min={2}
+                max={20}
+                step={1}
+                onValueChange={([value]) => setDuration(value ?? 5)}
                 className="flex-1"
               />
               <span className="w-20 shrink-0 rounded-xl border border-border bg-elevated px-3 py-2 text-center text-sm font-medium">

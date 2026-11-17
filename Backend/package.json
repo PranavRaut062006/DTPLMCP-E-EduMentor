@@ -16,6 +16,7 @@
   "dependencies": {
     "@elevenlabs/client": "^1.26.0",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@ffprobe-installer/ffprobe": "^2.1.2",
     "@google/generative-ai": "^0.24.1",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
@@ -24,6 +25,7 @@
     "express": "^5.2.1",
     "fluent-ffmpeg": "^2.1.3",
     "google-tts-api": "^2.0.2",
+    "googleapis": "^190.0.0",
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.6.0",
     "multer": "^2.2.0",

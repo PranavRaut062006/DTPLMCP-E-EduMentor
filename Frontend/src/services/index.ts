@@ -112,12 +112,30 @@ export const materialService = {
 };
 
 export const voiceService = {
-  status: () => readMaybe<{ has_voice: boolean; voice_id: string | null }>(endpoints.voice.status),
-  uploadSample: (file: File) => {
+  status: () => readMaybe<{ has_voice: boolean; voice_id: string | null; sample_name?: string | null; voice_configured?: boolean }>(endpoints.voice.status),
+  uploadSample: (file: Blob | File, consent: boolean) => {
     const form = new FormData();
-    form.append("voiceSample", file);
-    return requestMultipart<{ success: boolean; voice_id: string }>(endpoints.voice.upload, form);
+    form.append("voiceSample", file, file instanceof File ? file.name : "recorded_sample.webm");
+    form.append("consent", String(consent));
+    return requestMultipart<{ success: boolean; voice_id: string; message?: string }>(endpoints.voice.upload, form);
   },
+  setId: (voiceId: string, voiceName?: string) =>
+    request<{ success: boolean; voice_id: string; message: string }>(endpoints.voice.setId, {
+      method: "POST",
+      body: { voiceId, voiceName },
+    }),
+  preview: () => request<{ success: boolean; preview_url: string }>(endpoints.voice.preview, { method: "POST" }),
+  reset: () => request<{ success: boolean; message: string }>(endpoints.voice.reset, { method: "POST" }),
+};
+
+export const youtubeService = {
+  status: () => readMaybe<{ connected: boolean; channelTitle: string | null; configured: boolean; clientId?: string | null; channelName?: string | null }>(endpoints.youtube.status),
+  saveCredentials: (input: { clientId: string; clientSecret: string; channelName?: string }) =>
+    request<{ success: boolean; message: string }>(endpoints.youtube.credentials, { method: "POST", body: input }),
+  getAuthUrl: (topicId?: string) => request<{ authUrl: string }>(endpoints.youtube.authUrl(topicId)),
+  upload: (topicId: string, input: { title?: string; description?: string; privacyStatus?: string }) =>
+    request<{ success: boolean; videoId: string; youtubeUrl: string }>(endpoints.youtube.upload(topicId), { method: "POST", body: input }),
+  disconnect: () => request<{ success: boolean }>(endpoints.youtube.disconnect, { method: "POST" }),
 };
 
 export const videoService = {

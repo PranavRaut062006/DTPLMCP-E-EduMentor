@@ -25,6 +25,7 @@ app.use(express.json());
 
 import voiceRoutes from './routes/voice';
 import videoRoutes from './routes/videos';
+import youtubeRoutes from './routes/youtube';
 
 app.use('/api/auth', authRoutes);
 app.use('/api/classrooms', classroomRoutes);
@@ -38,6 +39,7 @@ app.use('/api/stats', statsRoutes);
 app.use('/api/materials', materialsRoutes);
 app.use('/api/voice', voiceRoutes);
 app.use('/api/videos', videoRoutes);
+app.use('/api/youtube', youtubeRoutes);
 
 // Serve static videos
 app.use('/videos', express.static(path.join(__dirname, '../../public/videos')));

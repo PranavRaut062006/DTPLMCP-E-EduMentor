@@ -47,6 +47,22 @@ export interface User {
   password?: string;
   role: 'faculty' | 'student';
   voice_id?: string;
+  custom_voice_id?: string;
+  voice_provider?: string;
+  voice_configured?: boolean;
+  voice_sample_name?: string;
+  youtube_tokens?: {
+    access_token?: string;
+    refresh_token?: string;
+    scope?: string;
+    token_type?: string;
+    expiry_date?: number;
+  };
+  youtube_channel_title?: string;
+  youtube_channel_name?: string;
+  youtube_client_id?: string;
+  youtube_client_secret?: string;
+  youtube_connected?: boolean;
 }
 
 export interface Subject {
@@ -83,9 +99,15 @@ export interface Content {
   topic_id: string;
   lecture_content: any; // e.g. lecture scripts, markdown
   ppt_content: any;     // structured ppt data
+  notes_content?: any;
   status: 'DRAFT' | 'PUBLISHED';
+  duration_minutes?: number; // Target duration requested (2 - 20 minutes)
   video_status?: 'NOT_STARTED' | 'QUEUED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
   video_url?: string;
+  video_duration_seconds?: number; // Actual measured duration of the video
+  youtube_url?: string;
+  youtube_video_id?: string;
+  youtube_uploaded_at?: string;
   created_by: string;
   created_at: string;
   updated_at: string;
